@@ -1,0 +1,74 @@
+# BP Doctor — .gitignore
+# Public-facing repo. Anything that's strategy, internal, or generated stays out.
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Business / strategy / internal — keep private
+# ──────────────────────────────────────────────────────────────────────────────
+7_DAY_LAUNCH_SPRINT.md
+BP_Doctor_Marketing_Blueprint.pdf
+MARKETING_AUTOMATION_PLAYBOOK.md
+Fab Plan.pdf
+bp doc reviews.txt
+marketing/
+archive/
+research/
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Build logs / generated artifacts
+# ──────────────────────────────────────────────────────────────────────────────
+v2_5_build.log
+v2_6_build.log
+*.log
+*.log.*
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Python
+# ──────────────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+htmlcov/
+build/
+dist/
+
+# ──────────────────────────────────────────────────────────────────────────────
+# UE5 plugin generated content
+# ──────────────────────────────────────────────────────────────────────────────
+fab-plugin/BPDoctor/Binaries/
+fab-plugin/BPDoctor/Intermediate/
+fab-plugin/BPDoctor/Saved/
+fab-plugin/BPDoctor/DerivedDataCache/
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Secrets / env
+# ──────────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Editor / OS
+# ──────────────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Claude / agent internals
+# ──────────────────────────────────────────────────────────────────────────────
+.claude/
+CLAUDE.md
+AGENTS.md

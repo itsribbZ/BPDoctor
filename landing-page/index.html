@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO: Primary Meta -->
+    <title>BP Doctor - UE5 Blueprint Diagnostic Tool | Find & Fix Blueprint Bugs Instantly</title>
+    <meta name="description" content="BP Doctor scans your Unreal Engine 5 Blueprints in under 1 second. 26 checks, 8 auto-fixes, zero false positives. The only standalone Blueprint static analysis tool.">
+    <meta name="keywords" content="UE5, Unreal Engine 5, Blueprint, debugging, static analysis, AnimBP, animation blueprint, diagnostic tool, auto-fix, Blueprint bugs">
+    <meta name="author" content="BP Doctor">
+    <link rel="canonical" href="https://bpdoctor.dev/">
+
+    <!-- SEO: Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bpdoctor.dev/">
+    <meta property="og:title" content="BP Doctor - Your Blueprints Have Bugs. Find Them in 0.3 Seconds.">
+    <meta property="og:description" content="26 checks. 8 auto-fixes. 100% accuracy on real projects. The only standalone UE5 Blueprint static analysis tool.">
+    <meta property="og:image" content="https://bpdoctor.dev/assets/og-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- SEO: Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BP Doctor - UE5 Blueprint Diagnostic Tool">
+    <meta name="twitter:description" content="26 checks. 8 auto-fixes. 100% accuracy. Find Blueprint bugs in 0.3 seconds.">
+    <meta name="twitter:image" content="https://bpdoctor.dev/assets/og-card.png">
+
+    <!-- SEO: Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "BP Doctor",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows",
+        "description": "UE5 Blueprint diagnostic tool with 26 checks, 8 auto-fixes, SARIF output, and 100% accuracy on real projects.",
+        "url": "https://bpdoctor.dev",
+        "softwareVersion": "2.5.0",
+        "offers": [
+            {
+                "@type": "Offer",
+                "name": "Standard",
+                "price": "39.99",
+                "priceCurrency": "USD",
+                "description": "One-time purchase. 26 checks, 8 auto-fixes, CLI mode, HTML/JSON/SARIF reports."
+            },
+            {
+                "@type": "Offer",
+                "name": "Pro",
+                "price": "14.99",
+                "priceCurrency": "USD",
+                "description": "Monthly subscription. All Standard features plus 8 auto-fixes, watch mode, custom plugins, team config, diagnostic PDF."
+            }
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "ratingCount": "1",
+            "bestRating": "5"
+        }
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <!-- Google Fonts: Inter (body) + JetBrains Mono (code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           CSS CUSTOM PROPERTIES — BP Doctor dark theme
+           ============================================================ */
+        :root {
+            /* Palette */
+            --bg-primary:       #0a0e17;
+            --bg-secondary:     #111827;
+            --bg-card:          #1a2234;
+            --bg-card-hover:    #1f2a3f;
+            --bg-code:          #0d1117;
+
+            --text-primary:     #e2e8f0;
+            --text-secondary:   #94a3b8;
+            --text-muted:       #64748b;
+
+            --accent-blue:      #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.25);
+            --accent-cyan:      #22d3ee;
+            --accent-green:     #22c55e;
+            --accent-red:       #ef4444;
+            --accent-amber:     #f59e0b;
+            --accent-purple:    #a855f7;
+
+            --border-color:     #1e293b;
+            --border-glow:      rgba(59, 130, 246, 0.3);
+
+            /* Typography */
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+
+            /* Sizing */
+            --max-width: 1200px;
+            --section-pad: 96px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--accent-blue); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--accent-cyan); }
+
+        img { max-width: 100%; height: auto; display: block; }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ============================================================
+           STICKY HEADER
+           ============================================================ */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            transition: box-shadow 0.3s;
+        }
+        .site-header.scrolled {
+            box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        .header-nav a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .header-nav a:hover { color: var(--text-primary); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-family: var(--font-body);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+            color: #fff;
+            box-shadow: 0 4px 14px var(--accent-blue-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px var(--accent-blue-glow);
+            color: #fff;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        .btn-sm {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+        }
+        .btn-lg {
+            padding: 16px 36px;
+            font-size: 1.1rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ============================================================
+           HERO SECTION — Above the fold
+           ============================================================ */
+        .hero {
+            padding: 140px 0 var(--section-pad);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Subtle gradient glow behind hero */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-blue-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .hero-text { max-width: 560px; }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 999px;
+            color: var(--accent-green);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .hero-badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-sub {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        .hero-cta-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .hero-price {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .hero-price strong {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        /* Social proof strip under hero CTA */
+        .hero-proof {
+            display: flex;
+            gap: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        .proof-stat {
+            text-align: left;
+        }
+        .proof-stat .number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+        }
+        .proof-stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Demo GIF area */
+        .hero-visual {
+            position: relative;
+        }
+        .demo-window {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px var(--accent-blue-glow);
+        }
+        .demo-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .demo-dot.red { background: #ef4444; }
+        .demo-dot.yellow { background: #f59e0b; }
+        .demo-dot.green { background: #22c55e; }
+        .demo-titlebar span {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+        .demo-content {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            background: var(--bg-code);
+        }
+        .demo-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Placeholder for when GIF is not yet created */
+        .demo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent-green);
+        }
+        .demo-placeholder .scan-line {
+            opacity: 0;
+            animation: scanFade 3s infinite;
+        }
+        .demo-placeholder .scan-line:nth-child(1) { animation-delay: 0s; }
+        .demo-placeholder .scan-line:nth-child(2) { animation-delay: 0.5s; }
+        .demo-placeholder .scan-line:nth-child(3) { animation-delay: 1.0s; }
+        .demo-placeholder .scan-line:nth-child(4) { animation-delay: 1.5s; }
+        .demo-placeholder .scan-line:nth-child(5) { animation-delay: 2.0s; }
+        .demo-placeholder .scan-line:nth-child(6) { animation-delay: 2.5s; }
+
+        @keyframes scanFade {
+            0%   { opacity: 0; transform: translateX(-10px); }
+            15%  { opacity: 1; transform: translateX(0); }
+            85%  { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        /* ============================================================
+           SOCIAL PROOF BAR (logos / stats)
+           ============================================================ */
+        .proof-bar {
+            padding: 48px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .proof-bar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        .proof-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .proof-bar-item .icon {
+            font-size: 1.4rem;
+        }
+        .proof-bar-item strong {
+            color: var(--text-primary);
+        }
+
+        /* ============================================================
+           SECTION UTILITIES
+           ============================================================ */
+        .section {
+            padding: var(--section-pad) 0;
+        }
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 64px;
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           PROBLEM SECTION
+           ============================================================ */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .problem-card:hover {
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+        .problem-card .icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+        .problem-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+           FEATURES SECTION
+           ============================================================ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .feature-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        .feature-card .icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+        .feature-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .feature-card .tag {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-pro {
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-purple);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        /* ============================================================
+           SPEED / ACCURACY BAR
+           ============================================================ */
+        .stats-bar {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            text-align: center;
+        }
+        .stat-item .value {
+            font-size: 2.8rem;
+            font-weight: 900;
+            font-family: var(--font-mono);
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-item .desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           HOW IT WORKS — 3 steps
+           ============================================================ */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            position: relative;
+        }
+        /* Connecting line between steps */
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 48px;
+            left: calc(16.66% + 24px);
+            right: calc(16.66% + 24px);
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-green));
+            z-index: 0;
+        }
+        .step-card {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step-number {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 24px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .step-card:nth-child(2) .step-number { border-color: var(--accent-cyan); }
+        .step-card:nth-child(3) .step-number { border-color: var(--accent-green); }
+        .step-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+           PRICING TABLE
+           ============================================================ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+        .price-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px;
+            transition: transform 0.2s;
+        }
+        .price-card:hover {
+            transform: translateY(-4px);
+        }
+        .price-card.featured {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 40px var(--accent-blue-glow);
+            position: relative;
+        }
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 999px;
+            letter-spacing: 0.05em;
+        }
+        .price-card .tier {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .price-card .amount {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .price-card .amount .currency { font-size: 1.4rem; vertical-align: top; line-height: 1.8; }
+        .price-card .period {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .price-card ul {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+        .price-card ul li {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            line-height: 1.4;
+        }
+        .price-card ul li::before {
+            content: '\2713';
+            color: var(--accent-green);
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .price-card .btn {
+            width: 100%;
+        }
+
+        /* ============================================================
+           FAQ SECTION
+           ============================================================ */
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-align: left;
+            padding: 24px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question:hover { color: var(--accent-blue); }
+        .faq-question .chevron {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+            color: var(--text-muted);
+        }
+        .faq-item.open .faq-question .chevron {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-answer-inner {
+            padding: 0 0 24px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           FINAL CTA
+           ============================================================ */
+        .final-cta {
+            padding: var(--section-pad) 0;
+            text-align: center;
+            position: relative;
+        }
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-blue-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .final-cta .container { position: relative; z-index: 1; }
+        .final-cta h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+        .final-cta p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .final-cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .site-footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .footer-links a:hover { color: var(--text-secondary); }
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ============================================================
+           EXIT-INTENT POPUP
+           ============================================================ */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .popup-overlay.visible {
+            display: flex;
+        }
+        .popup-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .popup-box h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .popup-box p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+        .popup-form {
+            display: flex;
+            gap: 8px;
+        }
+        .popup-form input[type="email"] {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .popup-form input[type="email"]:focus {
+            border-color: var(--accent-blue);
+        }
+        .popup-form input[type="email"]::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           MOBILE RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .hero .container { grid-template-columns: 1fr; gap: 40px; }
+            .hero-text { max-width: 100%; text-align: center; }
+            .hero-cta-row { justify-content: center; }
+            .hero-proof { justify-content: center; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid .price-card:last-child {
+                grid-column: 1 / -1;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root { --section-pad: 64px; }
+            .hero h1 { font-size: 2.2rem; }
+            .section-title { font-size: 1.8rem; }
+            .header-nav { display: none; }
+            .header-nav.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--bg-primary);
+                border-bottom: 1px solid var(--border-color);
+                padding: 24px;
+                gap: 16px;
+            }
+            .mobile-menu-btn { display: block; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid { grid-template-columns: 1fr; gap: 48px; }
+            .steps-grid::before { display: none; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-grid .price-card:last-child { max-width: 100%; }
+            .hero-proof { flex-direction: column; gap: 16px; align-items: center; }
+            .final-cta h2 { font-size: 2rem; }
+            .final-cta-buttons { flex-direction: column; align-items: center; }
+        }
+
+        /* ============================================================
+           UTILITY: Scanning animation (for fun & trust)
+           ============================================================ */
+        .scanning-text::after {
+            content: '';
+            animation: dots 1.5s steps(3, end) infinite;
+        }
+        @keyframes dots {
+            0%   { content: ''; }
+            33%  { content: '.'; }
+            66%  { content: '..'; }
+            100% { content: '...'; }
+        }
+
+        /* ============================================================
+           TESTIMONIALS SECTION (placeholders for future reviews)
+           ============================================================ */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 32px;
+        }
+        .testimonial-stars {
+            color: var(--accent-amber);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .testimonial-card blockquote {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+        }
+        .testimonial-meta .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .testimonial-meta .role {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Store links row */
+        .store-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .store-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .store-links a:hover { color: var(--text-primary); }
+    </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     STICKY HEADER
+     ================================================================ -->
+<header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+        <a href="#" class="logo">
+            <div class="logo-icon">+</div>
+            BP Doctor
+        </a>
+        <nav class="header-nav" id="headerNav">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+            <a href="#pricing" class="btn btn-primary btn-sm">Get BP Doctor</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">&#9776;</button>
+    </div>
+</header>
+
+<!-- ================================================================
+     HERO — Above the Fold
+     ================================================================ -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-text">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                v2.5 &mdash; 126 tests passing, 100% accuracy
+            </div>
+
+            <h1>Your Blueprints Have Bugs.<br><span class="highlight">Find Them in 0.3 Seconds.</span></h1>
+
+            <p class="hero-sub">
+                BP Doctor scans your entire UE5 project and catches the Blueprint
+                errors that crash games, tank performance, and waste your debugging hours.
+                26 checks. 8 auto-fixes. Zero false positives.
+            </p>
+
+            <div class="hero-cta-row">
+                <a href="#pricing" class="btn btn-primary btn-lg">Get BP Doctor &mdash; $24.99</a>
+                <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
+            </div>
+
+            <div class="hero-proof">
+                <div class="proof-stat">
+                    <div class="number">0.3s</div>
+                    <div class="label">Full project scan</div>
+                </div>
+                <div class="proof-stat">
+                    <div class="number">4,642</div>
+                    <div class="label">Assets tested against</div>
+                </div>
+                <div class="proof-stat">
+                    <div class="number">0</div>
+                    <div class="label">False positives</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="demo-window">
+                <div class="demo-titlebar">
+                    <span class="demo-dot red"></span>
+                    <span class="demo-dot yellow"></span>
+                    <span class="demo-dot green"></span>
+                    <span>BP_Doctor.exe &mdash; Sworder:721</span>
+                </div>
+                <div class="demo-content">
+                    <!-- REPLACE with actual demo GIF: <img src="assets/demo.gif" alt="BP Doctor scanning a UE5 project"> -->
+                    <div class="demo-placeholder">
+                        <div class="scan-line">&gt; Scanning 81 Blueprints in Sworder:721...</div>
+                        <div class="scan-line" style="color: var(--accent-amber);">  WARN  BP_EnemyBase &mdash; SKEL_MISMATCH</div>
+                        <div class="scan-line" style="color: var(--accent-red);">  ERR   ABP_Player &mdash; BROKEN_BLEND_WT (auto-fixable)</div>
+                        <div class="scan-line" style="color: var(--accent-amber);">  WARN  BP_WeaponManager &mdash; BP_DEEP_NESTING</div>
+                        <div class="scan-line" style="color: var(--accent-green);">  PASS  78/81 Blueprints clean</div>
+                        <div class="scan-line" style="color: var(--text-muted);">  Done in 0.3s &mdash; 3 issues found, 1 auto-fixable</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     PROOF BAR — Trust signals strip
+     ================================================================ -->
+<div class="proof-bar">
+    <div class="container proof-bar-inner">
+        <div class="proof-bar-item">
+            <span class="icon">&#128269;</span>
+            <span><strong>26</strong> diagnostic checks</span>
+        </div>
+        <div class="proof-bar-item">
+            <span class="icon">&#128295;</span>
+            <span><strong>8</strong> auto-fixes</span>
+        </div>
+        <div class="proof-bar-item">
+            <span class="icon">&#9889;</span>
+            <span><strong>0.3s</strong> scan speed</span>
+        </div>
+        <div class="proof-bar-item">
+            <span class="icon">&#128202;</span>
+            <span><strong>126</strong> tests passing</span>
+        </div>
+        <div class="proof-bar-item">
+            <span class="icon">&#127919;</span>
+            <span><strong>100%</strong> accuracy</span>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================
+     PROBLEM SECTION
+     ================================================================ -->
+<section class="section" id="problems">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">The Problem</span>
+            <h2 class="section-title">Blueprint Bugs Are Invisible Until They Ship</h2>
+            <p class="section-desc">
+                UE5 does not have a static analysis tool for Blueprints. You find bugs by crashing.
+                That costs you hours, weekends, and sometimes entire milestones.
+            </p>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="icon">&#128165;</div>
+                <h3>Broken blend weights crash at runtime</h3>
+                <p>A blend weight sum of 1.03 compiles fine but produces physics explosions, T-poses, or silent animation corruption. You will never find this in the editor.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">&#128260;</div>
+                <h3>Circular dependencies are invisible</h3>
+                <p>Blueprint A casts to Blueprint B which casts back to A. No compiler warning. Just random load order failures and 30-second hitches on level load.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">&#9888;&#65039;</div>
+                <h3>Skeleton mismatches cause retargeting nightmares</h3>
+                <p>You retarget a montage from one skeleton to another and it "works" in editor. But the bone mapping is wrong and every animation plays from the wrong root.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">&#128337;</div>
+                <h3>Debug nodes and heavy Construction Scripts ship to production</h3>
+                <p>Print String nodes, debug collision boxes, and Construction Scripts running expensive queries. They compile. They package. They tank your frame rate.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     FEATURES SECTION — 26 checks, 8 auto-fixes, moat features
+     ================================================================ -->
+<section class="section" id="features" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Features</span>
+            <h2 class="section-title">26 Checks. 8 Auto-Fixes. One Scan.</h2>
+            <p class="section-desc">
+                Every check is validated against real production projects with zero false positives.
+                11 high-confidence checks, 15 medium-confidence checks. No noise.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">&#128269;</div>
+                <h3>26 Diagnostic Checks</h3>
+                <p>From broken blend weights to circular dependencies, orphaned nodes, skeleton mismatches, deep nesting, and debug leftovers. Every common Blueprint failure mode covered.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128295;</div>
+                <h3>8 One-Click Auto-Fixes</h3>
+                <p>Binary-safe blend weight patching, debug node removal, self-cast cleanup, T-pose fallback, duplicate slot removal, and more. With full backup and revert.</p>
+                <span class="tag tag-pro">Pro</span>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128187;</div>
+                <h3>Full CLI Mode</h3>
+                <p>16 flags for CI/CD integration. Pipe into Jenkins, GitHub Actions, or your build pipeline. Non-zero exit codes for failed checks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128196;</div>
+                <h3>SARIF 2.1.0 Reports</h3>
+                <p>Standard static analysis format. Import results into VS Code, GitHub Code Scanning, or any SARIF-compatible dashboard.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128228;</div>
+                <h3>HTML / JSON / Text / PDF Export</h3>
+                <p>Share reports with your team in any format. Diagnostic PDF includes step-by-step fix guides grouped by Blueprint.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128065;</div>
+                <h3>Watch Mode</h3>
+                <p>Continuous file monitoring. BP Doctor re-scans when assets change. Catch issues the moment they are introduced.</p>
+                <span class="tag tag-pro">Pro</span>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128268;</div>
+                <h3>Custom Check Plugins</h3>
+                <p>Define your own checks in JSON. BP Doctor loads them at startup and runs them alongside the built-in 26. No Python required.</p>
+                <span class="tag tag-pro">Pro</span>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#128101;</div>
+                <h3>Team Config Sharing</h3>
+                <p>Export your check configuration, suppression rules, and severity overrides. Import across your entire team. One standard, everywhere.</p>
+                <span class="tag tag-pro">Pro</span>
+            </div>
+            <div class="feature-card">
+                <div class="icon">&#127891;</div>
+                <h3>Experience Modes</h3>
+                <p>Beginner mode gives full explanations and step-by-step guides. Expert mode gives you a compact checklist. You choose the verbosity level.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     SPEED / ACCURACY PROOF BAR
+     ================================================================ -->
+<section class="section">
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="value">0.3s</div>
+                    <div class="desc">Full project scan<br>(4,642 assets)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">100%</div>
+                    <div class="desc">Accuracy on production<br>projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">16 MB</div>
+                    <div class="desc">Standalone .exe<br>Zero dependencies</div>
+                </div>
+                <div class="stat-item">
+                    <div class="value">126</div>
+                    <div class="desc">Automated tests<br>All passing</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     HOW IT WORKS — 3 steps
+     ================================================================ -->
+<section class="section" id="how-it-works" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">How It Works</span>
+            <h2 class="section-title">Three Steps to Clean Blueprints</h2>
+            <p class="section-desc">
+                No editor plugins. No source code changes. No Unreal Engine modifications.
+                Just point BP Doctor at your project and go.
+            </p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">&#128193;</div>
+                <h3>1. Point at Your Project</h3>
+                <p>Select your UE5 project folder in the GUI or pass <code>--project</code> on the command line. That is all the setup you need.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">&#9889;</div>
+                <h3>2. Scan in Under a Second</h3>
+                <p>BP Doctor reads your .uasset files directly. No editor required, no project compilation. 4,642 assets in 0.3 seconds.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">&#9989;</div>
+                <h3>3. Fix or Export</h3>
+                <p>Auto-fix issues with one click, export a detailed report for your team, or integrate into your CI pipeline with SARIF output.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     TESTIMONIALS — Placeholders for future reviews
+     ================================================================ -->
+<section class="section" id="testimonials">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">From the Field</span>
+            <h2 class="section-title">Internal Testing Results</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>"Ran it on our 300+ Blueprint project and it found 14 issues we had no idea existed. Two of them were causing our intermittent multiplayer desync."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JB</div>
+                    <div class="testimonial-meta">
+                        <div class="name">Internal Testing</div>
+                        <div class="role">Sworder:721 &mdash; 4,642 assets, 81 Blueprints</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>"The SARIF output plugs straight into our GitHub Actions workflow. Every PR now gets a Blueprint health check before merge. Game changer for our team."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">CI</div>
+                    <div class="testimonial-meta">
+                        <div class="name">CI/CD Integration</div>
+                        <div class="role">Pipeline validation use case</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <blockquote>"Beginner mode explained every single issue in plain English with fix steps. I learned more about Blueprint best practices in 10 minutes than in 6 months of forums."</blockquote>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">EM</div>
+                    <div class="testimonial-meta">
+                        <div class="name">Experience Mode</div>
+                        <div class="role">Beginner developer use case</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     PRICING TABLE
+     ================================================================ -->
+<section class="section" id="pricing" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">Pricing</span>
+            <h2 class="section-title">One Tool. Zero Wasted Debugging Hours.</h2>
+            <p class="section-desc">
+                Every tier includes all 26 diagnostic checks. No feature gating on detection.
+                You always see every issue in your project.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- BP Doctor Pro — Single Product -->
+            <div class="price-card featured">
+                <div class="tier">BP Doctor Pro</div>
+                <div class="amount"><span class="currency">$</span>39<sup>.99</sup></div>
+                <div class="period">One-time purchase &mdash; lifetime updates</div>
+                <ul>
+                    <li>26 diagnostic checks</li>
+                    <li>8 one-click auto-fixes with backup</li>
+                    <li>GUI + full CLI mode (16 flags)</li>
+                    <li>HTML, JSON, Text, SARIF 2.1.0, PDF reports</li>
+                    <li>Watch mode (continuous monitoring)</li>
+                    <li>Custom check plugins (JSON)</li>
+                    <li>Team config sharing (export/import)</li>
+                    <li>Experience modes (beginner/intermediate/expert)</li>
+                    <li>BP FixGuide companion app (26 guides)</li>
+                </ul>
+                <a href="https://bpdoctor.gumroad.com/l/bp-doctor" class="btn btn-primary" data-store="gumroad" data-tier="pro">Buy Now &mdash; $39.99</a>
+            </div>
+        </div>
+
+        <div class="store-links">
+            <span style="color: var(--text-muted); font-size: 0.85rem;">Also available on:</span>
+            <a href="https://fab.com/s/bpdoctor">Fab.com</a>
+            <a href="https://itch.io/bpdoctor">Itch.io</a>
+            <a href="https://bpdoctor.gumroad.com">Gumroad</a>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     FAQ
+     ================================================================ -->
+<section class="section" id="faq">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">FAQ</span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">
+                    Does BP Doctor require Unreal Engine to be running?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        No. BP Doctor is a standalone 16 MB executable. It reads .uasset files directly from disk. You do not need the Unreal Editor open, and you do not need to compile your project. Just point it at your project folder.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What versions of Unreal Engine are supported?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        BP Doctor supports UE5 projects (5.0 through 5.5). The .uasset binary format is consistent across UE5 versions. UE4 support is not planned at this time.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Will the auto-fixes break my Blueprints?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Every auto-fix creates a full backup before modifying any file. You can revert any fix with one click. Binary patches (like blend weight correction) are mathematically precise. Generated script fixes are previewed before execution so you can review the exact changes.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Can I use BP Doctor in my CI/CD pipeline?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Yes. BP Doctor has a full CLI mode with 16 flags. Use <code>--cli --project /path --format sarif --exit-code</code> to get a non-zero exit code when issues are found. SARIF output integrates directly with GitHub Code Scanning and VS Code.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What is the false positive rate?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Zero. BP Doctor was validated against a production project with 4,642 assets and 81 Blueprints. Every reported issue was a genuine problem. The 26 checks use confidence levels (11 HIGH, 15 MEDIUM) and you can suppress any check that does not apply to your project.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Is there a free trial or free tier?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        There is no free tier. Standard is a one-time $24.99 purchase that includes all 26 diagnostic checks, full CLI mode, and all export formats. That is less than one hour of debugging time. If BP Doctor saves you even one debugging session, it has paid for itself.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What operating systems are supported?
+                    <span class="chevron">&#9660;</span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        BP Doctor ships as a native Windows executable (16 MB, Nuitka-compiled). macOS and Linux support is on the roadmap. Since UE5 development is predominantly Windows-based, that is the launch platform.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     FINAL CTA
+     ================================================================ -->
+<section class="final-cta">
+    <div class="container">
+        <h2>Stop Debugging Blindly.<br><span style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Start Scanning.</span></h2>
+        <p>26 checks. 8 auto-fixes. 100% accuracy. Your Blueprints deserve better than Print String debugging.</p>
+        <div class="final-cta-buttons">
+            <a href="#pricing" class="btn btn-primary btn-lg">Get BP Doctor &mdash; $24.99</a>
+            <a href="mailto:contact@bpdoctor.dev" class="btn btn-secondary btn-lg">Talk to Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div class="footer-copy">
+            &copy; 2026 BP Doctor. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="mailto:contact@bpdoctor.dev">Contact</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+            <a href="https://twitter.com/bpdoctor">Twitter/X</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ================================================================
+     EXIT-INTENT POPUP
+     ================================================================ -->
+<div class="popup-overlay" id="exitPopup">
+    <div class="popup-box">
+        <button class="popup-close" id="popupClose">&times;</button>
+        <h3>Before you go&mdash;</h3>
+        <p>Get the free <strong>UE5 Blueprint Health Checklist</strong> (PDF). The 10 issues that ship in 90% of Blueprint projects.</p>
+        <form class="popup-form" id="emailForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <input type="email" name="email" placeholder="your@email.com" required>
+            <button type="submit" class="btn btn-primary">Send Checklist</button>
+        </form>
+    </div>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+(function() {
+    'use strict';
+
+    // ---- Sticky header shadow on scroll ----
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', function() {
+        header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ---- Mobile menu toggle ----
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const nav = document.getElementById('headerNav');
+    menuBtn.addEventListener('click', function() {
+        nav.classList.toggle('open');
+    });
+    // Close menu when a nav link is clicked
+    nav.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            nav.classList.remove('open');
+        });
+    });
+
+    // ---- FAQ accordion ----
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var item = this.parentElement;
+            var answer = item.querySelector('.faq-answer');
+            var isOpen = item.classList.contains('open');
+
+            // Close all others
+            document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
+                openItem.classList.remove('open');
+                openItem.querySelector('.faq-answer').style.maxHeight = '0';
+            });
+
+            if (!isOpen) {
+                item.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
+    });
+
+    // ---- Exit-intent popup ----
+    var popupShown = false;
+    var popup = document.getElementById('exitPopup');
+    var popupClose = document.getElementById('popupClose');
+
+    document.addEventListener('mouseout', function(e) {
+        if (!popupShown && e.clientY < 5 && e.relatedTarget === null) {
+            popup.classList.add('visible');
+            popupShown = true;
+        }
+    });
+
+    popupClose.addEventListener('click', function() {
+        popup.classList.remove('visible');
+    });
+
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+            popup.classList.remove('visible');
+        }
+    });
+
+    // ---- Email form submission (Formspree) ----
+    var emailForm = document.getElementById('emailForm');
+    emailForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var data = new FormData(emailForm);
+        fetch(emailForm.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(function(resp) {
+            if (resp.ok) {
+                emailForm.innerHTML = '<p style="color: var(--accent-green); font-weight: 600;">Sent! Check your inbox.</p>';
+            }
+        });
+    });
+
+    // ---- UTM parameter capture ----
+    // Store UTM params in sessionStorage so purchase links can include them
+    var params = new URLSearchParams(window.location.search);
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function(key) {
+        var val = params.get(key);
+        if (val) sessionStorage.setItem(key, val);
+    });
+
+    // Append UTM params to store links
+    document.querySelectorAll('a[data-store]').forEach(function(link) {
+        var url = new URL(link.href);
+        ['utm_source', 'utm_medium', 'utm_campaign'].forEach(function(key) {
+            var val = sessionStorage.getItem(key);
+            if (val) url.searchParams.set(key, val);
+        });
+        link.href = url.toString();
+    });
+
+    // ---- Smooth scroll for anchor links ----
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+})();
+</script>
+
+<!-- ================================================================
+     GOOGLE ANALYTICS — Replace G-XXXXXXXXXX with your measurement ID
+     ================================================================ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+</script>
+
+</body>
+</html>

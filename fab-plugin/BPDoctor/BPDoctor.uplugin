@@ -1,0 +1,26 @@
+{
+	"FileVersion": 3,
+	"Version": 3,
+	"VersionName": "2.7.4",
+	"FriendlyName": "BP Doctor",
+	"Description": "Catches silent animation bugs that ship to prod and T-pose in builds — the ones UE's compiler won't flag. Scans every Blueprint and AnimBlueprint for 20 silent-failure patterns by default: null anim refs, broken slot routing, empty state machines, skeleton mismatches, cached-pose orphans, root-motion mismatches, linked-layer misconfig. Three profiles (Silent / Standard / Everything = 20 / 28 / 39 checks). Safe auto-fix with atomic undo. Headless commandlet with SARIF 2.1.0 for GitHub / GitLab / Jenkins. UE 5.3 — 5.7.",
+	"Category": "Code Plugins",
+	"CreatedBy": "Jacob Ribbe",
+	"CreatedByURL": "https://fab.com/sellers/JacobRibbe",
+	"DocsURL": "https://fab.com/sellers/JacobRibbe",
+	"SupportURL": "https://fab.com/sellers/JacobRibbe",
+	"EngineVersion": "5.3.0",
+	"EnabledByDefault": false,
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "BPDoctor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"PlatformAllowList": [ "Win64", "Mac", "Linux" ]
+		}
+	]
+}

@@ -1,0 +1,28 @@
+BP Doctor — Plugin License
+Copyright (C) 2025-2026 Jacob Ribbe. All rights reserved.
+
+This plugin is distributed via the Fab marketplace under the Fab End-User License
+Agreement (EULA). By installing or using this plugin, you agree to the terms of
+the Fab EULA, available at:
+
+    https://www.fab.com/eula
+
+Permitted use:
+- Use of this plugin within Unreal Engine projects, including projects shipped
+  to end users.
+- Use across an unlimited number of seats within a single seat-licensed
+  organization, per Fab seat-license terms.
+
+Restrictions:
+- Redistribution of the plugin source, binaries, or assets outside of the
+  licensee's own UE projects is prohibited.
+- Reverse engineering, sublicensing, or sale of the plugin or any substantial
+  portion of it is prohibited.
+
+For support, questions, or licensing inquiries, contact the seller via the
+Fab product listing's support channel:
+
+    https://fab.com/sellers/JacobRibbe
+
+The bundled HTML user guide (Documentation/BP_Doctor_User_Guide.html) covers
+installation, usage, and CI/CD integration.

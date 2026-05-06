@@ -1,0 +1,53 @@
+{
+    "_comment": "BP Doctor — Custom Rules Example. Copy this file to YourProject/Saved/BPDoctor/CustomRules.json and customize.",
+    "_docs": "Rule types: banned_function, banned_node, required_node, node_limit. Rules appear alongside the 34 built-in checks.",
+
+    "rules": [
+        {
+            "name": "Ban GetAllActorsOfClass",
+            "code": "CUSTOM_NO_GAA",
+            "severity": "WARNING",
+            "confidence": "HIGH",
+            "description": "GetAllActorsOfClass iterates the entire actor list. Use tags or cached references instead.",
+            "why_it_matters": "With 50+ actors calling this per frame, FPS drops significantly. Use Actor Tags or store references in BeginPlay.",
+            "beginner_tip": "This function searches EVERY actor in the level every time it runs. Store the result in a variable instead of calling it repeatedly.",
+            "type": "banned_function",
+            "function_name": "GetAllActorsOfClass"
+        },
+        {
+            "name": "Max 3 Timelines Per BP",
+            "code": "CUSTOM_TIMELINE_CAP",
+            "severity": "INFO",
+            "confidence": "HIGH",
+            "description": "Blueprint exceeds the recommended Timeline limit.",
+            "why_it_matters": "Each Timeline creates a hidden component that ticks every frame. Multiple Timelines multiply this hidden cost.",
+            "beginner_tip": "Consider merging Timelines or using Lerp with a Timer for simple animations.",
+            "type": "node_limit",
+            "node_class_contains": "K2Node_Timeline",
+            "max_count": 3
+        },
+        {
+            "name": "Require Slot Node in AnimBPs",
+            "code": "CUSTOM_REQUIRE_SLOT",
+            "severity": "WARNING",
+            "confidence": "MEDIUM",
+            "description": "AnimBP has no Slot node. Montages will not play without one.",
+            "why_it_matters": "PlayMontage silently fails if the AnimBP has no Slot node. This is the #1 AnimBP forum question.",
+            "beginner_tip": "Add an AnimSlot node to your AnimGraph and connect it to your pose chain. Then montages will work.",
+            "type": "required_node",
+            "node_class_contains": "AnimGraphNode_Slot",
+            "animBP_only": true
+        },
+        {
+            "name": "Ban Delay Nodes",
+            "code": "CUSTOM_NO_DELAY",
+            "severity": "INFO",
+            "confidence": "HIGH",
+            "description": "Delay node found. Consider using Timers for more control over timing.",
+            "why_it_matters": "Delay nodes are simple but hard to cancel and can cause bugs when the owning actor is destroyed mid-delay.",
+            "beginner_tip": "The Delay node pauses execution but can cause issues if the actor is destroyed while waiting. Use Set Timer by Event for safer timing.",
+            "type": "banned_function",
+            "function_name": "Delay"
+        }
+    ]
+}

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BP Doctor — Complete User Guide</title>
+<style>
+  @page { margin: 1in; size: letter; }
+  @media print { .no-print { display: none; } .page-break { page-break-before: always; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; color: #c9d1d9; background: #0d1117; line-height: 1.6; padding: 40px; max-width: 900px; margin: 0 auto; }
+  h1 { color: #00e5ff; font-size: 32px; border-bottom: 3px solid #00e5ff; padding-bottom: 8px; margin-bottom: 16px; }
+  h2 { color: #00e5ff; font-size: 22px; border-bottom: 1px solid #333; padding-bottom: 6px; margin: 32px 0 12px 0; }
+  h3 { color: #88aacc; font-size: 16px; margin: 20px 0 8px 0; }
+  h4 { color: #aab; font-size: 14px; margin: 12px 0 4px 0; }
+  p, li { font-size: 14px; margin-bottom: 8px; }
+  ul, ol { padding-left: 24px; margin-bottom: 12px; }
+  a { color: #00e5ff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { background: #161b22; padding: 2px 6px; border-radius: 3px; font-family: 'Consolas', monospace; font-size: 13px; color: #e6edf3; }
+  pre { background: #161b22; padding: 16px; border-radius: 6px; overflow-x: auto; margin: 12px 0; font-size: 13px; color: #e6edf3; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th { background: #161b22; padding: 10px 12px; text-align: left; border-bottom: 2px solid #333; font-size: 13px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #222; font-size: 13px; }
+  tr:hover { background: #161b2288; }
+  .toc { background: #161b22; border: 1px solid #333; border-radius: 8px; padding: 20px 28px; margin: 24px 0; }
+  .toc a { display: block; padding: 4px 0; }
+  .toc .sub { padding-left: 20px; font-size: 13px; }
+  .back-toc { font-size: 12px; color: #555; float: right; }
+  .back-toc a { color: #555; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; }
+  .err { background: #ff174422; color: #ff5577; }
+  .wrn { background: #ffd74022; color: #ffd740; }
+  .inf { background: #00e5ff22; color: #00e5ff; }
+  .hi { color: #00e676; }
+  .med { color: #ffd740; }
+  .lo { color: #ff9100; }
+  .check-card { background: #161b22; border: 1px solid #333; border-radius: 6px; padding: 16px; margin: 12px 0; }
+  .check-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .fix-steps { background: #0d2818; border-left: 3px solid #00e676; padding: 12px 16px; margin: 8px 0; border-radius: 0 4px 4px 0; }
+  .detection { background: #1a1a2e; border-left: 3px solid #00e5ff; padding: 8px 16px; margin: 8px 0; font-size: 12px; border-radius: 0 4px 4px 0; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #333; color: #555; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<h1>BP Doctor — Complete User Guide</h1>
+<p>Blueprint Diagnostics &amp; Auto-Fix for Unreal Engine 5</p>
+<p style="color:#555">Version 2.7.4 | Requires UE 5.3 — 5.7 | Profile-based scanning for signal-over-noise</p>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc" id="toc">
+<h3 style="margin-top:0">Table of Contents</h3>
+<a href="#getting-started">1. Getting Started</a>
+<a href="#interface" class="sub">1.1 Interface Overview</a>
+<a href="#toolbar" class="sub">1.2 Toolbar Reference</a>
+<a href="#scanning">2. Scanning Your Project</a>
+<a href="#results" class="sub">2.1 Understanding Results</a>
+<a href="#health-grade" class="sub">2.2 Health Grade</a>
+<a href="#confidence" class="sub">2.3 Confidence System</a>
+<a href="#fixing">3. Fixing Issues</a>
+<a href="#auto-fix" class="sub">3.1 Auto-Fix</a>
+<a href="#manual-fix" class="sub">3.2 Manual Fix (Navigate)</a>
+<a href="#revert" class="sub">3.3 Reverting Fixes</a>
+<a href="#fix-all" class="sub">3.4 Fix All</a>
+<a href="#checks">4. Check Reference (All 39 Checks)</a>
+<a href="#animBP-checks" class="sub">4.1 AnimBP Checks (1-12, 27-39)</a>
+<a href="#bp-checks" class="sub">4.2 General Blueprint Checks (13-26)</a>
+<a href="#managing">5. Managing Checks</a>
+<a href="#enable-disable" class="sub">5.1 Enable / Disable Checks</a>
+<a href="#suppression" class="sub">5.2 Suppression</a>
+<a href="#custom-rules">6. Custom Rules</a>
+<a href="#rule-types" class="sub">6.1 Rule Types</a>
+<a href="#rule-examples" class="sub">6.2 Examples</a>
+<a href="#export">7. Exporting Reports</a>
+<a href="#cicd">8. CI/CD Integration</a>
+<a href="#settings">9. Settings</a>
+<a href="#experience" class="sub">9.1 Experience Modes</a>
+<a href="#files" class="sub">9.2 File Locations</a>
+<a href="#faq">10. FAQ &amp; Troubleshooting</a>
+</div>
+
+<!-- 1. GETTING STARTED -->
+<h2 id="getting-started">1. Getting Started <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+
+<p>BP Doctor is a native UE5 editor plugin that scans all Blueprints and Animation Blueprints in your project for 39 silent-failure patterns — from T-pose bugs to performance anti-patterns. It runs inside the editor as a dockable tab.</p>
+
+<h3 id="interface">1.1 Interface Overview</h3>
+<p>Open BP Doctor from the editor menu: <code>Window &gt; BP Doctor</code> (or <code>Tools &gt; BP Doctor</code>).</p>
+<p>The panel has three areas:</p>
+<ul>
+<li><strong>Toolbar</strong> — Scan, Fix All, Undo, Export, HTML, Checks, Settings, Clear + filters</li>
+<li><strong>Results List</strong> — All found issues with 7 columns: Severity, Confidence, Check, Type, Asset, Description, Fix</li>
+<li><strong>Detail Panel</strong> — Full information about the selected issue including fix instructions</li>
+</ul>
+
+<h3 id="toolbar">1.2 Toolbar Reference</h3>
+<table>
+<tr><th>Button</th><th>What It Does</th></tr>
+<tr><td><strong>Scan Project</strong></td><td>Scans all Blueprints in <code>/Game</code> for issues</td></tr>
+<tr><td><strong>Fix All</strong></td><td>Opens a checklist dialog to select and apply multiple fixes at once</td></tr>
+<tr><td><strong>Undo Fix</strong></td><td>Reverts the most recent fix via UE5's transaction system</td></tr>
+<tr><td><strong>Export</strong></td><td>Saves a text report to a file you choose</td></tr>
+<tr><td><strong>HTML</strong></td><td>Exports a styled dark-themed HTML report</td></tr>
+<tr><td><strong>Checks</strong></td><td>Opens the Check Library — browse and enable/disable all 39 checks</td></tr>
+<tr><td><strong>Settings</strong></td><td>Opens the Settings dialog — experience mode, suppressions, custom rules, file paths</td></tr>
+<tr><td><strong>Clear</strong></td><td>Clears all scan results</td></tr>
+</table>
+<p>Right side of toolbar: <strong>Search box</strong> (filter by check code, asset name, or description), <strong>Experience Mode dropdown</strong> (Beginner/Intermediate/Expert), and <strong>severity checkboxes</strong> (Errors, Warnings, Info, Suppressed).</p>
+
+<!-- 2. SCANNING -->
+<div class="page-break"></div>
+<h2 id="scanning">2. Scanning Your Project <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+<p>Click <strong>Scan Project</strong>. BP Doctor loads every Blueprint and Animation Blueprint under <code>/Game</code> and runs all enabled checks against them. Progress is shown in the cyan progress bar.</p>
+
+<h3 id="results">2.1 Understanding Results</h3>
+<p>Each row in the results list shows:</p>
+<table>
+<tr><th>Column</th><th>Meaning</th></tr>
+<tr><td><span class="badge err">ERR</span> / <span class="badge wrn">WRN</span> / <span class="badge inf">INF</span></td><td><strong>Severity</strong> — how serious the issue is</td></tr>
+<tr><td><span class="hi">HI</span> / <span class="med">MED</span> / <span class="lo">LO</span></td><td><strong>Confidence</strong> — how reliable the detection is (hover for details)</td></tr>
+<tr><td>Check code</td><td>Which diagnostic rule was triggered (e.g., <code>BP_SELF_CAST</code>)</td></tr>
+<tr><td>Anim / BP</td><td>Whether this is an AnimBP or general Blueprint issue</td></tr>
+<tr><td>Asset</td><td>The Blueprint asset where the issue was found</td></tr>
+<tr><td>Description</td><td>What's wrong</td></tr>
+<tr><td>Fix</td><td><code>YES</code> = auto-fixable, <code>-</code> = manual fix required, <code>DONE</code> = already fixed</td></tr>
+</table>
+<p>Rows are color-tinted by severity: red for errors, yellow for warnings, blue for info, green for fixed.</p>
+
+<h3 id="health-grade">2.2 Health Grade</h3>
+<p>After scanning, your project gets a letter grade based on errors and warnings found:</p>
+<table>
+<tr><th>Grade</th><th>Meaning</th></tr>
+<tr><td style="color:#00e676;font-weight:bold">A+</td><td>0 errors, 0 warnings, 0 info — perfectly clean scan</td></tr>
+<tr><td style="color:#00e676">A</td><td>0 errors, 0 warnings (info-only is fine)</td></tr>
+<tr><td style="color:#ffd740">B+</td><td>0 errors, 1-3 warnings</td></tr>
+<tr><td style="color:#ffd740">B</td><td>0 errors, 4+ warnings</td></tr>
+<tr><td style="color:#ff9100">C</td><td>1-2 errors</td></tr>
+<tr><td style="color:#ff5577">D</td><td>3-5 errors</td></tr>
+<tr><td style="color:#ff5577;font-weight:bold">F</td><td>6+ errors — silent failures shipping to prod</td></tr>
+</table>
+<p><strong>Errors</strong> are silent-failure bugs (T-pose, broken refs, etc.) that need fixing. <strong>Warnings</strong> are perf / architecture smells — context matters.</p>
+
+<h3 id="confidence">2.3 Confidence System</h3>
+<p>Each check has a confidence level that tells you how much to trust the result:</p>
+<table>
+<tr><th>Level</th><th>Meaning</th><th>What You Should Do</th></tr>
+<tr><td class="hi"><strong>HIGH</strong></td><td>Deterministic detection. Near-zero false positives.</td><td>Trust it. Fix it.</td></tr>
+<tr><td class="med"><strong>MEDIUM</strong></td><td>Reliable heuristic. Rare false positives possible.</td><td>Likely correct. Verify if unsure.</td></tr>
+<tr><td class="lo"><strong>LOW</strong></td><td>Heuristic-based. May have false positives.</td><td>Always verify in the editor before acting.</td></tr>
+</table>
+<p><strong>Hover over the confidence badge</strong> in the results list to see exactly how BP Doctor detected the issue. In Intermediate and Beginner modes, the detail panel also shows the detection method.</p>
+
+<!-- 3. FIXING -->
+<div class="page-break"></div>
+<h2 id="fixing">3. Fixing Issues <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+
+<h3 id="auto-fix">3.1 Auto-Fix</h3>
+<p>Issues marked <code>YES</code> in the Fix column can be fixed automatically:</p>
+<ol>
+<li>Select the issue in the results list</li>
+<li>Click <strong>Fix This Issue</strong></li>
+<li>A preview dialog shows exactly what will change</li>
+<li>For some checks (blend weights, slot names): enter a <strong>custom value</strong> or leave blank for the default</li>
+<li>Click <strong>Apply Fix</strong></li>
+</ol>
+<p>Auto-fixable checks (7 total): <code>BROKEN_BLEND_WT</code>, <code>MISSING_SLOT</code>, <code>DUP_SLOT</code>, <code>BLEND_WT_SUM</code>, <code>ORPHANED_NODE</code>, <code>BP_SELF_CAST</code>, <code>BP_DEBUG_NODES</code>.</p>
+<p><strong>Profile note</strong>: 4 of 7 (<code>BROKEN_BLEND_WT</code>, <code>MISSING_SLOT</code>, <code>DUP_SLOT</code>, <code>BLEND_WT_SUM</code>) fire on the default <em>Silent Failures Only</em> profile. The other 3 (<code>ORPHANED_NODE</code>, <code>BP_SELF_CAST</code>, <code>BP_DEBUG_NODES</code>) are stylistic-tier checks — switch to <em>Everything</em> profile to surface them.</p>
+
+<h3 id="manual-fix">3.2 Manual Fix (Navigate)</h3>
+<p>For issues that can't be auto-fixed, click <strong>Navigate</strong>. This opens the Blueprint editor AND zooms directly to the problematic node. The detail panel shows step-by-step fix instructions under <strong>HOW TO FIX</strong>.</p>
+
+<h3 id="revert">3.3 Reverting Fixes</h3>
+<p>Every fix is reversible:</p>
+<ul>
+<li><strong>Revert button</strong> — appears next to Fix This Issue when an issue has been fixed. Restores the Blueprint from a backup taken before the fix was applied.</li>
+<li><strong>Undo Fix</strong> (toolbar) — reverts the most recent fix using UE5's transaction system.</li>
+</ul>
+<p>Backups are stored in <code>Saved/BPDoctor/Backups/</code> and cleaned up after successful revert.</p>
+
+<h3 id="fix-all">3.4 Fix All</h3>
+<p>Click <strong>Fix All</strong> to open a checklist showing every auto-fixable issue:</p>
+<ul>
+<li>Each issue has a checkbox (all checked by default)</li>
+<li>Uncheck any issues you want to skip</li>
+<li>Use <strong>Select All</strong> / <strong>Deselect All</strong> buttons</li>
+<li>Click <strong>Apply Selected Fixes</strong></li>
+</ul>
+<p>The entire batch is one undo step — a single Undo Fix reverts everything.</p>
+
+<!-- 4. CHECK REFERENCE -->
+<div class="page-break"></div>
+<h2 id="checks">4. Check Reference (All 39 Checks) <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+
+<h3 id="animBP-checks">4.1 AnimBP Checks (1-12, 27-39)</h3>
+
+<div class="check-card">
+<div class="check-header"><strong>#1 NULL_ANIM_REF — Null Anim Reference</strong> <span class="badge err">ERROR</span> <span class="hi">HIGH</span></div>
+<p>Sequence Player node has no animation asset assigned.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Click Navigate to open the AnimBP<br>2. Find the Sequence Player node with no animation<br>3. In its Details panel, set the Sequence property to a valid AnimSequence<br>4. Compile and save the AnimBP</div>
+<div class="detection">Detection: Scans all AnimGraphNode_SequencePlayer nodes. Flags any where the Sequence property is null.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#2 BROKEN_BLEND_WT — Broken Blend Weight</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>Blend weight value is outside the valid [0.0, 1.0] range.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>AUTO-FIX: Clamps the value to [0.0, 1.0]. Use the custom input field to set a specific value.<br><br>MANUAL: Navigate to the LayeredBoneBlend node &gt; find the BlendWeight pin &gt; set a value between 0.0 and 1.0.</div>
+<div class="detection">Detection: Reads default pin values on LayeredBoneBlend nodes. Flags any BlendWeight pin with a value outside [0.0, 1.0].</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#3 SKEL_MISMATCH — Skeleton Mismatch</strong> <span class="badge err">ERROR</span> <span class="med">MED</span></div>
+<p>Your AnimBP is set to one skeleton (e.g. UE5 Mannequin) but one of its animations was made for a different skeleton (e.g. Mixamo or an older UE4 rig). The animation won't play correctly — bones end up in wrong positions or the asset fails to cook.</p>
+<div class="fix-steps"><strong>How to Fix (easy — swap the animation):</strong><br>1. Click <strong>Navigate</strong> to open the AnimBP<br>2. Find the animation node with the yellow warning badge<br>3. In the <strong>Details</strong> panel on the right, find the <code>Sequence</code> or <code>Anim Sequence</code> property<br>4. Click the dropdown and pick an animation built for the SAME skeleton your AnimBP uses<br>5. Hit <strong>Compile</strong> (top-left)<br><br><strong>To check your skeleton:</strong> Open the AnimBP &gt; <strong>Class Defaults</strong> tab (top-right) &gt; <code>Target Skeleton</code> field shows the name.<br><br><strong>How to Fix (harder — retarget):</strong><br>1. <strong>Window</strong> menu &gt; <strong>Retarget Manager</strong><br>2. Source Skeleton = the animation's original skeleton<br>3. Target Skeleton = your AnimBP's skeleton<br>4. Map the bones (UE auto-maps most common rigs)<br>5. Click <strong>Retarget</strong> — creates new animations on your skeleton<br>6. Swap the AnimBP node to the new retargeted animation<br><br><strong>Why it happens:</strong> common cause is importing Mixamo anims or FBX from another project without retargeting first.</div>
+<div class="detection">Detection: Compares the AnimBP's TargetSkeleton against each referenced animation's Skeleton.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#4 MISSING_SLOT — Missing Default Slot</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>AnimBP references montages but has no Slot node in the AnimGraph — montages will not play.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br><strong>AUTO-FIX:</strong> Adds a DefaultSlot node to the AnimGraph. After fixing, open the AnimBP and connect the Slot node into your pose chain.<br><br><strong>MANUAL:</strong><br>1. Open the AnimBP &gt; AnimGraph<br>2. Right-click &gt; Add Slot node (search 'Slot')<br>3. Set the Slot Name (usually 'DefaultSlot')<br>4. Connect it between your pose chain and the Output Pose<br>5. Make sure your Montages use the same Slot Name</div>
+<div class="detection">Detection: Searches AnimGraph for AnimGraphNode_Slot. Only flags if montage references are present. MEDIUM confidence — montages may be triggered from other BPs.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#5 BROKEN_TRANS — Broken Transition</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>State machine contains unreachable states with no inbound transitions.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Open the State Machine graph<br>2. Look for states with no arrows pointing INTO them<br>3. Either add a transition from another state, or delete the unreachable state<br>4. Verify every state has at least one inbound transition from Entry</div>
+<div class="detection">Detection: Counts states vs transitions. Heuristic: if states &gt; transitions + 1, some states may be unreachable.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#6 TPOSE_FALLBACK — T-Pose Fallback</strong> <span class="badge err">ERROR</span> <span class="med">MED</span></div>
+<p>Your character will T-pose (arms out like a scarecrow) the moment this blend node runs. One of the most common silent-failure bugs in shipped games.</p>
+<div class="fix-steps"><strong>What's happening:</strong> A <code>Layered Blend Per Bone</code> node mixes two poses — a base pose (e.g. idle) and a layer pose (e.g. upper-body aim). If the <strong>BasePose</strong> input has no connection, the node has nothing to blend FROM, so it outputs the skeleton's rest pose — T-pose.<br><br><strong>Visual clue:</strong> The BasePose input is the FIRST input pin on the LayeredBoneBlend, top-left of the node. No white wire going into it = bug.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> to open the AnimGraph<br>2. Find the flagged <code>Layered Blend Per Bone</code> node (yellow/red badge)<br>3. Look at the top-left input pin labeled <strong>Base Pose</strong><br>4. Find your main pose chain (usually a State Machine output or a BlendSpace)<br>5. Drag a wire from its output INTO the Base Pose pin<br>6. Hit <strong>Compile</strong><br>7. Press Play — character should no longer T-pose<br><br><strong>If the node shouldn't exist:</strong> select it, press Delete, reconnect the surrounding nodes so the pose chain is continuous from the State Machine down to Output Pose.<br><br><strong>Why it's subtle:</strong> UE's compiler does NOT warn about disconnected BasePose inputs. The AnimBP compiles clean. You only see the bug at runtime — which is why this ships to prod constantly.</div>
+<div class="detection">Detection: Checks LayeredBoneBlend nodes for disconnected BasePose input pins.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#7 ORPHANED_NODE — Orphaned Node</strong> <span class="badge inf">INFO</span> <span class="med">MED</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>Node exists in the graph but is not reachable from the Output Pose.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br><strong>AUTO-FIX:</strong> Deletes all AnimGraph nodes not reachable from the Output Pose root. Only affects top-level graph nodes — state machine contents are preserved.<br><br><strong>MANUAL:</strong><br>1. Click Navigate to find the orphaned node<br>2. Check if it was accidentally disconnected (reconnect if needed)<br>3. If truly unused, select it and press Delete<br>4. Clean up any connected but also-orphaned nodes</div>
+<div class="detection">Detection: Skips AnimBPs with 15 or fewer anim nodes. Walks from Output Pose root via input pins. Flags if more than 3 nodes are unreachable.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#8 INVALID_BSPACE — Invalid BlendSpace</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>BlendSpace asset has 0 or 1 sample points — cannot interpolate.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Open the BlendSpace asset<br>2. Add sample points by dragging animations onto the grid<br>3. Place at least 2 samples at different axis positions<br>4. Preview the interpolation by moving the green crosshair</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#9 MISSING_NOTIFY — Missing Notify</strong> <span class="badge inf">INFO</span> <span class="med">MED</span></div>
+<p>AnimNotify references a function or event that has been deleted.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Open the AnimBP &gt; Event Graph<br>2. Check if the notify handler exists (AnimNotify_[Name])<br>3. If deleted: right-click &gt; Add AnimNotify Event<br>4. Reconnect to gameplay logic (sound, VFX, etc.)</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#10 DUP_SLOT — Duplicate Slot Name</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>Same slot name used by multiple Slot nodes in the AnimGraph.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>AUTO-FIX: Renames duplicates with _2, _3 suffixes. Use custom input to set your own name.<br><br>MANUAL: Open AnimGraph &gt; find Slot nodes &gt; give each a unique name (e.g., UpperBody, LowerBody).</div>
+<div class="detection">Detection: Compares SlotName on all Slot nodes. Exact string match — HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#11 UNUSED_VAR — Unused Variable</strong> <span class="badge inf">INFO</span> <span class="lo">LOW</span></div>
+<p>AnimInstance variable declared but never read in the AnimGraph.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Find the flagged variable in My Blueprint<br>2. Search for it (Ctrl+F)<br>3. If truly unused, delete it<br><br>NOTE: Verify in editor — this check uses heuristics and may have false positives.</div>
+<div class="detection">Detection: Heuristic — counts properties vs VariableGet nodes. LOW confidence — may miss struct access patterns.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#12 DEPRECATED_NODE — Deprecated Node</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>AnimGraph uses a node class marked deprecated.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the deprecated node<br>2. Hover to see the deprecation warning<br>3. Right-click &gt; Find Replacement<br>4. Replace and reconnect pins</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#27 MM_NO_DATABASE — MotionMatching Missing Database</strong> <span class="badge err">ERROR</span> <span class="hi">HIGH</span></div>
+<p>MotionMatching node has no Pose Search Database assigned — outputs T-pose silently.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the MotionMatching node<br>2. In Details, assign a <code>UPoseSearchDatabase</code> to the Database property<br>3. Compile the AnimBP — the T-pose should be replaced by DB-selected poses</div>
+<div class="detection">Detection: Scans every AnimGraphNode_MotionMatching; flags any with a null Database reference. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#28 MM_NO_INERTIALIZATION — MotionMatching Missing Inertialization</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>MotionMatching output chain has no Inertialization node downstream — pose pops on every DB selection.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the MotionMatching node<br>2. Insert an <strong>Inertialization</strong> node between MM output and Output Pose (or the next blend node)<br>3. Set a reasonable blend time (0.15–0.3s is typical for locomotion)</div>
+<div class="detection">Detection: From the MM node, walks downstream output connections; flags if no Inertialization node is found before Output Pose. MEDIUM confidence — intentional pop-cut styles may be false positives.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#29 SLOT_NAME_MISMATCH — Slot Name Not Registered in Skeleton</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Slot node uses a SlotName that isn't registered in the Skeleton's slot groups — montages targeting this slot will silently fail.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the Slot node, note its SlotName<br>2. Open the AnimBP's Target Skeleton<br>3. In the Skeleton editor: <strong>Anim Slot Manager</strong> &gt; add the slot name to an existing group or create a new group<br>4. Save the skeleton</div>
+<div class="detection">Detection: Reads Slot node SlotName; resolves the AnimBP's TargetSkeleton and checks its registered slot groups. MEDIUM confidence — heuristic-match for group names.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#30 DEAD_CACHED_POSE — Dead Cached Pose</strong> <span class="badge inf">INFO</span> <span class="hi">HIGH</span></div>
+<p>SaveCachedPose without matching UseCachedPose (or vice versa) — orphan node contributes no value.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the cached-pose node<br>2. Either delete the orphan Save (if the cache was retired) or add a matching Use (if you meant to consume it)<br>3. Compile — the dead node should be gone from the graph</div>
+<div class="detection">Detection: Collects all SaveCachedPose and UseCachedPose names; flags any name present in one set but not the other. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#31 EMPTY_SM — Empty State Machine</strong> <span class="badge err">ERROR</span> <span class="hi">HIGH</span></div>
+<p>State machine has zero states or the Entry node has no outbound linked transition — evaluation freezes on entry.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the SM node and open its sub-graph<br>2. Add at least one state connected from the Entry node<br>3. Give the state an anim pose (connect a sequence or blend)<br>4. Re-run the scan to confirm</div>
+<div class="detection">Detection: Opens each StateMachine sub-graph; counts UAnimStateNode entries and checks Entry-node outbound links. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#32 BLEND_WT_SUM — Blend Weights Don't Sum to 1</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>LayeredBoneBlend BlendWeights sum is outside [0.95, 1.05] — partial blending produces unexpected pose bias.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br><strong>AUTO-FIX:</strong> Normalizes weights so their sum equals 1.0, preserving the ratio between layers.<br><br><strong>MANUAL:</strong> In the LayeredBoneBlend node, adjust individual BlendWeight defaults so their total is ~1.0.</div>
+<div class="detection">Detection: Sums default BlendWeight pin values on each LayeredBoneBlend; flags when sum is outside [0.95, 1.05]. MEDIUM confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#33 EMPTY_BRANCH_FILTER — LayeredBoneBlend Empty Bone Filter</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>LayeredBoneBlend layer has no BranchFilters configured — blends the entire skeleton, defeating the purpose of the node.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate to the LayeredBoneBlend node<br>2. For each layer, set <strong>BranchFilters</strong> to the bones that layer should drive (e.g., <code>spine_03</code> for upper body)<br>3. If no filter is needed, use a simple BlendTwoWay node instead</div>
+<div class="detection">Detection: Iterates LayeredBoneBlend LayerSetup; flags any layer with an empty BranchFilters array. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#34 DISCONNECTED_SLOT_SRC — Slot Source Pin Disconnected</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>Your character will T-pose between montages. Every time a montage (attack, reload, reaction) finishes, the character snaps into T-pose for a frame before returning to idle.</p>
+<div class="fix-steps"><strong>What's happening:</strong> A Slot node is where montages 'play over' your base animation. It has two pins:<br>&nbsp;&nbsp;- <strong>Source</strong> (input, left): the base pose the slot mixes montages over<br>&nbsp;&nbsp;- <strong>output</strong> (right): the final result after the montage plays<br><br>If Source has no connection, the slot has no base pose to fall back to when no montage is active — so it outputs T-pose.<br><br><strong>Visual clue:</strong> The Slot node's left-side input pin (<code>Source</code>) has no white wire going into it. Node title shows the slot name, e.g. <code>DefaultSlot</code>.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> to open the AnimGraph<br>2. Find the flagged Slot node (yellow badge)<br>3. Look at its left input pin labeled <strong>Source</strong><br>4. Find your base pose (typically the State Machine output or main BlendSpace — whatever was feeding the pose chain before the Slot was added)<br>5. Drag a wire from the base pose's output pin INTO the Slot's Source pin<br>6. Hit <strong>Compile</strong><br>7. Test in-game: play a montage, let it finish — character should return to idle, not T-pose<br><br><strong>Typical pose chain:</strong> <code>State Machine -&gt; Slot (DefaultSlot) -&gt; Output Pose</code>. Slot's Source input comes FROM the State Machine. Slot's output goes TO Output Pose.<br><br><strong>If the slot isn't used:</strong> If no montage ever plays on this slot, you can delete the Slot node entirely — select it, press Delete, reconnect the State Machine output directly to the next node in your chain.</div>
+<div class="detection">Detection: Reads each Slot node's Source input pin and flags disconnected states. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#35 ROOTMOTION_MODE_MISMATCH — RootMotion Mode Mismatch</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>Your character won't move forward correctly — root motion from one or more animations is being silently dropped at runtime.</p>
+<div class="fix-steps"><strong>What's happening:</strong> Two settings have to agree: the AnimBP's <strong>Root Motion Mode</strong> (in Class Defaults) and each animation's <strong>Enable Root Motion</strong> flag (in the animation's asset settings). When Mode is <code>RootMotionFromMontagesOnly</code>, root motion only works for montages — SequencePlayer nodes silently drop it. When Mode is <code>IgnoreRootMotion</code>, the engine extracts the motion then throws it away — the character pivots in place.<br><br><strong>Visual clue:</strong> Open the AnimBP &gt; <strong>Class Defaults</strong> tab (top-right) &gt; look for the <strong>Root Motion Mode</strong> dropdown. The flagged animation asset shows <code>Enable Root Motion</code> checked in its own Details panel.<br><br><strong>Why it matters:</strong> The character moves in the preview but drifts or pivots in-game. Projectiles, dodge rolls, and root-motion attacks land in wrong positions. Ships silently — UE never warns about the mismatch.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> to open the AnimBP<br>2. Click the <strong>Class Defaults</strong> tab (top-right toolbar)<br>3. Find <strong>Root Motion Mode</strong> in the Details panel<br>4. Change it to <strong>Root Motion From Everything</strong> (this is the standard AAA locomotion setting — consumes root motion from both SequencePlayers and montages)<br>5. <em>Alternative:</em> If the animation shouldn't drive character movement, open the flagged AnimSequence asset and uncheck <strong>Enable Root Motion</strong><br>6. Compile and test in-game — character should translate correctly<br><br><strong>Why it's subtle:</strong> The AnimBP compiles clean. The animation plays fine in the viewport preview. The mismatch only shows as drift or in-place pivoting during PIE, and only for animations on non-montage nodes.</div>
+<div class="detection">Detection: Reads RootMotionMode from AnimBP CDO. Walks SequencePlayer and BlendSpacePlayer nodes (SM-recursive), checks UAnimSequence::bEnableRootMotion against the active mode. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#36 LINKED_LAYER_NO_LAYER — LinkedAnimLayer No Layer Selected</strong> <span class="badge err">ERROR</span> <span class="hi">HIGH</span></div>
+<p>Your LinkedAnimLayer node is missing a Layer selection. The character will T-pose in whatever part of the graph this node feeds.</p>
+<div class="fix-steps"><strong>What's happening:</strong> Linked Anim Layers are how UE5 routes parts of the AnimGraph to separate implementations — common for modular rigs (upper body vs lower body, vehicle vs on-foot states). The <strong>Layer</strong> field tells the node which layer interface to evaluate. When it's blank (<code>None</code>), the node has no pose chain to run, so it outputs the skeleton's default rest pose — T-pose — for every frame it's active.<br><br><strong>Visual clue:</strong> Click the LinkedAnimLayer node, then look in the <strong>Details</strong> panel on the right. The <strong>Layer</strong> dropdown will be blank or show <code>None</code>. Nodes with this problem often have a yellow warning badge.<br><br><strong>Why it matters:</strong> Any state machine state or graph path that flows through this node produces T-pose at runtime. The AnimBP compiles with zero errors.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> to open the AnimGraph<br>2. Click the flagged <strong>Linked Anim Layer</strong> node<br>3. In the <strong>Details</strong> panel, find the <strong>Layer</strong> dropdown<br>4. Select the correct layer from your Anim Layer Interface (e.g. <code>Locomotion</code>, <code>UpperBody</code>, <code>FullBody</code>)<br>5. If no interface exists yet, check whether you need a <strong>Linked Anim Graph</strong> node instead (which links entire AnimBPs rather than layer slots)<br>6. Hit <strong>Compile</strong><br><br><strong>Why it's subtle:</strong> The node looks identical whether or not a layer is selected — there's no red X or obvious visual indicator in the graph itself. You only discover the T-pose when you run the game and enter the affected state.</div>
+<div class="detection">Detection: Walks UAnimGraphNode_LinkedAnimLayer nodes (SM-recursive). Flags any where FAnimNode_LinkedAnimLayer::Layer.IsNone(). HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#37 CURVE_ALPHA_MISSING — Curve-Alpha References Missing Skeleton Curve</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>A blend node's curve-driven alpha references a curve that was deleted (or never added) on the skeleton. The blend is permanently stuck at 0 — the layered animation never appears.</p>
+<div class="fix-steps"><strong>What's happening:</strong> Some blend nodes (e.g. <code>Apply Mesh Space Additive</code>, <code>Blend List By Bool</code>) can read their blend weight from a curve value instead of a variable. You set <strong>Alpha Input Type</strong> to <code>Curve</code> and name the curve in <strong>Alpha Curve Name</strong>. Every frame, the runtime looks up that name in the skeleton's curve metadata. If the curve doesn't exist there, it returns 0 — the blend never activates, no matter what the animation data says.<br><br><strong>Visual clue:</strong> Click the flagged blend node &gt; <strong>Details</strong> panel &gt; look for <strong>Alpha Input Type</strong> set to <code>Curve</code> and <strong>Alpha Curve Name</strong> showing a name (e.g. <code>AimWeight</code>). The issue description will tell you the exact curve name that's missing.<br><br><strong>Why it matters:</strong> The layered animation (aim offset, procedural lean, additive effect) simply never plays. The character animates fine for everything else, so it looks like an art problem rather than a rig issue. Very hard to spot without the check.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> to find the flagged blend node<br>2. Note the missing curve name from the issue description (e.g. <code>AimWeight</code>)<br>3. <strong>Option A — add the curve to the skeleton:</strong> Open the Skeleton asset &gt; <strong>Window</strong> menu &gt; <strong>Curves</strong> &gt; click <strong>+</strong> &gt; type the exact curve name &gt; Save the Skeleton<br>4. <strong>Option B — switch to float input:</strong> On the blend node, change <strong>Alpha Input Type</strong> to <code>Float</code> and wire a variable or constant into the new Alpha pin instead<br>5. Compile and test — the blend should now activate<br><br><strong>Why it's subtle:</strong> The AnimBP compiles cleanly. The node runs every frame. It just always reads 0. There's no in-editor warning, and the blend simply looks like it was never turned on.</div>
+<div class="detection">Detection: Reflects over all anim graph nodes' inner Node structs. Finds AlphaInputType=Curve, reads AlphaCurveName, validates against USkeleton::GetCurveMetaData(). HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#38 MONTAGE_SECTION_LOOP — AnimMontage Section Loops With No Exit</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>A montage will play forever — it loops back to itself with no way out. Gameplay code expecting <code>Montage_Ended</code> won't receive the event.</p>
+<div class="fix-steps"><strong>What's happening:</strong> AnimMontages are divided into named <strong>Composite Sections</strong> (e.g. <code>Start</code>, <code>Loop</code>, <code>End</code>). Each section has a <strong>Next Section</strong> field that chains them together. When Next Section is blank (<code>None</code>), the montage ends — that's normal. But when a section points back to itself, or a chain forms a closed cycle (A → B → A) with no <code>None</code> exit, the montage is infinite. It will run until <code>Montage_Stop</code> is called explicitly.<br><br><strong>Visual clue:</strong> Open the montage asset. At the bottom of the editor you'll see the <strong>Sections</strong> panel — a row of named sections with arrows between them. A self-loop shows as a section with an arrow curving back to itself. The issue description names the exact section and montage.<br><br><strong>Why it matters:</strong> Gameplay code (reload complete, attack finish, cinematic hand-off) listens for <code>Montage_Ended</code>. That event never fires. The character locks into the montage permanently. In multiplayer, this can desync the entire animation state.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> — this opens the montage asset directly<br>2. In the Sections panel at the bottom, find the looping section named in the issue description<br>3. Click the section to select it<br>4. In its <strong>Details</strong> panel (or the Sections panel's Next field), set <strong>Next Section Name</strong> to <code>None</code> (montage ends here) or to a real exit section (e.g. <code>End</code>)<br>5. Save the montage<br><br><strong>If the loop is intentional</strong> (e.g. a weapon idle loop that waits for a Montage_Stop from gameplay code): the check will still fire. Consider naming the section clearly (e.g. <code>Loop_RequiresStop</code>) so the team knows it's deliberate.<br><br><strong>Why it's subtle:</strong> Sections panel arrows can be hard to read at a glance. The montage looks fine in the editor preview — it loops smoothly. The broken behavior only appears when <code>Montage_Ended</code> never fires in game.</div>
+<div class="detection">Detection: Walks K2Node_CallFunction nodes calling Montage_Play / PlayMontage / PlayAnimMontage. Reads the literal Montage pin DefaultObject, dedupes, then detects self-loops and closed cycles via chain walk. HIGH confidence.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#39 BLENDSPACE_ZERO_AXIS — BlendSpace Axis Has Zero Range</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>Your BlendSpace can't actually blend on one of its axes — the Min and Max values are the same, so there's no range to interpolate across.</p>
+<div class="fix-steps"><strong>What's happening:</strong> A BlendSpace uses axes to define its input range (e.g. <strong>Horizontal Axis</strong>: Speed 0..600, <strong>Vertical Axis</strong>: Direction -180..180). You place sample animations at positions within that range and UE interpolates between them based on runtime input values. If Min == Max on any axis, the range collapses to a single point — every input value maps to the same position, and no blending can happen along that dimension.<br><br><strong>Visual clue:</strong> Open the flagged BlendSpace asset &gt; <strong>Details</strong> panel on the right &gt; expand <strong>Horizontal Axis</strong> (and <strong>Vertical Axis</strong> for 2D BlendSpaces) &gt; look for <strong>Min</strong> and <strong>Max</strong> fields showing the same number (commonly both 0.0). The issue description tells you which axis is broken and its current Min/Max values.<br><br><strong>Why it matters:</strong> Locomotion feels snapped or broken — speed changes or direction changes produce no visual blend. The character may always play the same animation regardless of input. If the zero-range axis is Speed, your character runs and walks at the same animation rate.<br><br><strong>How to Fix:</strong><br>1. Click <strong>Navigate</strong> to open the BlendSpace asset<br>2. In the <strong>Details</strong> panel, expand <strong>Horizontal Axis</strong> (and <strong>Vertical Axis</strong> if this is a 2D BlendSpace)<br>3. Set <strong>Min</strong> and <strong>Max</strong> to a sensible range for your game (e.g. Speed: Min <code>0</code>, Max <code>600</code>)<br>4. Re-place your animation samples across the new range in the BlendSpace grid<br>5. Save the BlendSpace<br><br><strong>Common cause:</strong> The axis was set up but Max was never changed from its default of 0, or parameters were copy-pasted from another BlendSpace and one axis wasn't updated.<br><br><strong>Why it's subtle:</strong> The BlendSpace saves and cooks without errors. In the BlendSpace editor preview the grid looks populated. The bug only shows as stiff, non-blending animation in-game.</div>
+<div class="detection">Detection: Walks BlendSpacePlayer nodes (SM-recursive). Reads UBlendSpace::GetBlendParameter(0) and GetBlendParameter(1), flags axes where FMath::IsNearlyEqual(Min, Max). HIGH confidence.</div>
+</div>
+
+<h3 id="bp-checks">4.2 General Blueprint Checks (13-26)</h3>
+
+<div class="check-card">
+<div class="check-header"><strong>#13 BP_BROKEN_REF — Broken Asset Reference</strong> <span class="badge err">ERROR</span> <span class="hi">HIGH</span></div>
+<p>Blueprint references an asset path that does not exist on disk.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Navigate and look for red 'Missing' errors<br>2. Replace with a valid asset reference, or delete the node<br>3. Check Content Browser &gt; Show Redirectors for moved assets</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#14 BP_COMPLEXITY — Excessive Complexity</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Blueprint has 100+ unique nodes.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Collapse related nodes to Functions<br>2. Move heavy logic to C++<br>3. Split responsibilities: one BP per concern</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#15 BP_EMPTY_GRAPH — Empty Event Graph</strong> <span class="badge inf">INFO</span> <span class="hi">HIGH</span></div>
+<p>Blueprint exists but contains no meaningful logic.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Check if it's a data-only Blueprint (might be intentional)<br>2. If truly empty: delete it in Content Browser<br>3. Fix Up Redirectors afterwards</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#16 BP_TICK_HEAVY — Tick Performance Risk</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Event Tick enabled with high node complexity.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Move non-essential logic to Timers (0.1-0.5s intervals)<br>2. Use event-driven patterns (overlaps, delegates)<br>3. Uncheck 'Start with Tick Enabled' if Tick isn't needed</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#17 BP_SELF_CAST — Self-Cast</strong> <span class="badge inf">INFO</span> <span class="hi">HIGH</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>Blueprint casts to its own class type.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>AUTO-FIX: Removes the Cast node and reroutes connections through the source pin.<br><br>MANUAL: Delete the Cast node and use a 'Self' reference instead.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#18 BP_DEPRECATED_FUNC — Deprecated API</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Blueprint uses deprecated functions.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Hover the node for the deprecation message<br>2. Delete and replace with the suggested alternative<br>3. Reconnect pins and test</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#19 BP_CIRCULAR_DEP — Circular Dependency</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Two Blueprints reference each other.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Create a Blueprint Interface<br>2. Move shared function signatures to the Interface<br>3. Replace Cast nodes with Interface Message calls</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#20 BP_MASSIVE_ASSET — Oversized Asset</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>Blueprint file is larger than 5MB.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Check for embedded data (large arrays, mesh data)<br>2. Move data to separate Data Assets or Data Tables<br>3. Right-click &gt; Size Map to see what's consuming space</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#21 BP_HARD_REF — Hard Reference Bloat</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Excessive hard references via Cast nodes.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Replace casts with Blueprint Interface calls<br>2. Use Soft Object References + Async Load<br>3. Use Reference Viewer to visualize the chain</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#22 BP_EXPENSIVE_TICK — Expensive Tick Operations</strong> <span class="badge wrn">WARN</span> <span class="med">MED</span></div>
+<p>Expensive queries alongside Event Tick.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Cache query results in BeginPlay<br>2. Use Timers instead of per-frame calls<br>3. For actor finding: use Actor Tags (faster)</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#23 BP_DEBUG_NODES — Debug Nodes</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span> <span style="color:#00e676">Auto-fixable</span></div>
+<p>PrintString or DrawDebug nodes still present.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>AUTO-FIX: Deletes all debug nodes and reroutes execution pins.<br><br>MANUAL: Search for PrintString/DrawDebug, delete, and reconnect white exec pins.</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#24 BP_CONSTRUCT_HEAVY — Construction Script Misuse</strong> <span class="badge wrn">WARN</span> <span class="hi">HIGH</span></div>
+<p>Heavy operations in Construction Script.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Move SpawnActor/queries from Construction Script to BeginPlay<br>2. Use ChildActorComponents for editor-visible spawning<br>3. Keep Construction Script lightweight</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#25 BP_FOREACH_PERF — ForEach Loop Performance</strong> <span class="badge inf">INFO</span> <span class="med">MED</span></div>
+<p>ForEachLoop re-evaluates pure inputs every iteration.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Cache the array input in a local variable before the loop<br>2. Connect the variable to ForEachLoop instead of the function call</div>
+</div>
+
+<div class="check-card">
+<div class="check-header"><strong>#26 BP_TIMELINE_HEAVY — Excessive Timelines</strong> <span class="badge inf">INFO</span> <span class="med">MED</span></div>
+<p>Multiple Timeline nodes creating hidden tick overhead.</p>
+<div class="fix-steps"><strong>How to Fix:</strong><br>1. Merge Timelines with similar curves<br>2. Use FInterpTo for simple lerps<br>3. Use Set Timer for one-shot animations</div>
+</div>
+
+<!-- 5. MANAGING CHECKS -->
+<div class="page-break"></div>
+<h2 id="managing">5. Managing Checks <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+
+<h3 id="enable-disable">5.1 Enable / Disable Checks</h3>
+<p>Click <strong>Checks</strong> in the toolbar to open the Check Library. Each check has a checkbox — uncheck to disable it. Disabled checks are skipped during scanning. Click <strong>Save</strong> to persist your choices.</p>
+
+<h3 id="suppression">5.2 Suppression</h3>
+<p>To hide a specific issue you want to ignore:</p>
+<ol>
+<li>Select the issue in the results list</li>
+<li>Click <strong>Suppress</strong></li>
+<li>The issue disappears from normal results</li>
+</ol>
+<p>To view and manage suppressed issues:</p>
+<ol>
+<li>Check the <strong>Suppressed (N)</strong> checkbox in the filter bar</li>
+<li>The list now shows ONLY suppressed items</li>
+<li>Select any item and click <strong>Unsuppress</strong> to restore it</li>
+</ol>
+<p>Suppressions persist across sessions via <code>Settings.json</code>. Use <strong>Settings &gt; Clear All Suppressions</strong> to reset.</p>
+
+<!-- 6. CUSTOM RULES -->
+<div class="page-break"></div>
+<h2 id="custom-rules">6. Custom Rules <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+<p>Create project-specific diagnostic rules that run alongside the 39 built-in checks. No JSON editing required — use the visual editor.</p>
+
+<h3>Getting Started with Custom Rules</h3>
+<p>Three ways to create custom rules (pick whichever is easiest):</p>
+<ol>
+<li><strong>Visual Editor:</strong> Settings > <strong>Edit Rules...</strong> — add rules via form fields, save with one click</li>
+<li><strong>Create Example:</strong> Settings > <strong>Create Example</strong> — generates a starter file you can edit</li>
+<li><strong>Import:</strong> Settings > <strong>Import...</strong> — load a rules file from a teammate or another project</li>
+</ol>
+<p>Custom rules are stored in <code>Saved/BPDoctor/CustomRules.json</code> and loaded automatically on each scan.</p>
+
+<h3>Visual Rules Editor</h3>
+<p>Open <strong>Settings > Edit Rules...</strong> to see the editor. It shows all current rules and lets you:</p>
+<ul>
+<li>View existing rules with their code, name, type, match string, and severity</li>
+<li>Add new rules by filling in the form: Name, Code, Type (dropdown), Severity (dropdown), Match string, Description</li>
+<li>Delete rules you no longer need</li>
+<li>Save everything back to JSON with one click</li>
+</ul>
+
+<h3 id="rule-types">6.1 Rule Types</h3>
+<table>
+<tr><th>Type</th><th>What It Does</th><th>Key Field</th></tr>
+<tr><td><code>banned_function</code></td><td>Flags any call to a specific function</td><td><code>function_name</code></td></tr>
+<tr><td><code>banned_node</code></td><td>Flags any node whose class contains a string</td><td><code>node_class_contains</code></td></tr>
+<tr><td><code>required_node</code></td><td>Flags if NO matching node exists</td><td><code>node_class_contains</code></td></tr>
+<tr><td><code>node_limit</code></td><td>Flags if node count exceeds a threshold</td><td><code>node_class_contains</code> + <code>max_count</code></td></tr>
+</table>
+
+<h3 id="rule-examples">6.2 Examples</h3>
+<pre>{
+  "rules": [
+    {
+      "name": "Ban GetAllActorsOfClass",
+      "code": "CUSTOM_NO_GAA",
+      "severity": "WARNING",
+      "confidence": "HIGH",
+      "description": "Use Actor Tags or cached references instead.",
+      "type": "banned_function",
+      "function_name": "GetAllActorsOfClass"
+    },
+    {
+      "name": "Max 3 Timelines",
+      "code": "CUSTOM_TL_CAP",
+      "severity": "INFO",
+      "confidence": "HIGH",
+      "description": "Too many Timeline nodes.",
+      "type": "node_limit",
+      "node_class_contains": "K2Node_Timeline",
+      "max_count": 3
+    }
+  ]
+}</pre>
+
+<!-- 7. EXPORTING -->
+<div class="page-break"></div>
+<h2 id="export">7. Exporting Reports <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+<p><strong>Text Report</strong> — click <strong>Export</strong>. Plain text file with all issues, grades, and asset details.</p>
+<p><strong>HTML Report</strong> — click <strong>HTML</strong>. Styled dark-themed report with color-coded severity, confidence badges, and per-asset detail sections. Opens in any browser.</p>
+
+<!-- 8. CI/CD -->
+<h2 id="cicd">8. CI/CD Integration <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+<p>Run BP Doctor headless from the command line for build pipelines:</p>
+<pre>UnrealEditor-Cmd.exe Project.uproject -run=BPDoctor [options]</pre>
+<table>
+<tr><th>Option</th><th>Default</th><th>Description</th></tr>
+<tr><td><code>-output=path</code></td><td>stdout</td><td>Output file path</td></tr>
+<tr><td><code>-format=json|text</code></td><td>text</td><td>Report format</td></tr>
+<tr><td><code>-severity=error|warning|info</code></td><td>info</td><td>Minimum severity to include</td></tr>
+<tr><td><code>-fail-on=error|warning|info</code></td><td>error</td><td>Severity that causes exit code 1</td></tr>
+</table>
+<p><strong>Exit codes:</strong> 0 = pass, 1 = issues found at fail-on severity or above.</p>
+<pre># GitHub Actions example
+- name: BP Doctor
+  run: UnrealEditor-Cmd.exe $PROJECT -run=BPDoctor -output=report.json -format=json -fail-on=error</pre>
+
+<!-- 9. SETTINGS -->
+<div class="page-break"></div>
+<h2 id="settings">9. Settings <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+<p>Click <strong>Settings</strong> in the toolbar to open the full Settings dialog. It has interactive controls for everything:</p>
+
+<h3>Settings Dialog Sections</h3>
+<table>
+<tr><th>Section</th><th>What You Can Do</th></tr>
+<tr><td><strong>Experience Mode</strong></td><td>Radio buttons to switch between Beginner, Intermediate, Expert</td></tr>
+<tr><td><strong>Checks</strong></td><td>See how many are enabled/disabled, click "Manage Checks..." to toggle individual checks</td></tr>
+<tr><td><strong>Suppression</strong></td><td>See suppressed count, "Clear All Suppressions" button to reset</td></tr>
+<tr><td><strong>Custom Rules</strong></td><td>"Edit Rules..." (visual editor), "Import..." (load from file), "Create Example" (generate starter file)</td></tr>
+<tr><td><strong>Configuration</strong></td><td>"Import Settings..." and "Export Settings..." to share your full config with teammates</td></tr>
+<tr><td><strong>File Paths</strong></td><td>Shows exactly where Settings.json, CustomRules.json, and Backups are stored</td></tr>
+</table>
+
+<h3>Sharing Configuration Across Projects</h3>
+<p>Use <strong>Export Settings...</strong> to save your full BP Doctor configuration (experience mode, disabled checks, suppressed issues) to a .json file. Share this file with your team or import it into other projects via <strong>Import Settings...</strong></p>
+
+<h3 id="experience">9.1 Experience Modes</h3>
+<table>
+<tr><th>Mode</th><th>Detail Panel Shows</th></tr>
+<tr><td><strong>Beginner</strong></td><td>Full detail: fix instructions, beginner tips, why-it-matters, detection method</td></tr>
+<tr><td><strong>Intermediate</strong></td><td>Standard: check info, fix instructions, confidence, detection method</td></tr>
+<tr><td><strong>Expert</strong></td><td>Compact one-liner: code, severity, asset, description</td></tr>
+</table>
+
+<h3 id="files">9.2 File Locations</h3>
+<p>All BP Doctor data is stored in your project's <code>Saved/BPDoctor/</code> directory:</p>
+<table>
+<tr><th>File</th><th>Purpose</th></tr>
+<tr><td><code>Settings.json</code></td><td>Experience mode, disabled checks, suppressed issues</td></tr>
+<tr><td><code>CustomRules.json</code></td><td>User-defined diagnostic rules</td></tr>
+<tr><td><code>Backups/</code></td><td>Temporary .uasset backups for fix revert (auto-cleaned)</td></tr>
+</table>
+
+<!-- 10. FAQ -->
+<div class="page-break"></div>
+<h2 id="faq">10. FAQ &amp; Troubleshooting <span class="back-toc"><a href="#toc">Back to TOC</a></span></h2>
+
+<h4>Q: The scan found issues but Auto-fixable shows 0. Why?</h4>
+<p>7 checks support auto-fix: BROKEN_BLEND_WT, MISSING_SLOT, ORPHANED_NODE, DUP_SLOT, BP_SELF_CAST, BP_DEBUG_NODES, BLEND_WT_SUM. The other issues require manual fixes. Click Navigate to jump to the exact node and follow the fix instructions in the detail panel.</p>
+
+<h4>Q: A check flagged something that isn't actually a problem. What do I do?</h4>
+<p>Click <strong>Suppress</strong> to hide it. If the check consistently produces false positives for your project, disable it via <strong>Checks</strong> &gt; uncheck it &gt; <strong>Save</strong>. Check the confidence level — LOW confidence checks are heuristic-based and expected to have some false positives.</p>
+
+<h4>Q: Can I add my own checks?</h4>
+<p>Yes. Create <code>Saved/BPDoctor/CustomRules.json</code> with your rules. See Section 6 for the format and examples. Rules are loaded automatically on each scan.</p>
+
+<h4>Q: How do I use BP Doctor in my CI/CD pipeline?</h4>
+<p>Run <code>UnrealEditor-Cmd.exe YourProject.uproject -run=BPDoctor</code> with format/output/severity flags. By default it returns exit code 0 even when issues are found — pass <code>-failOnError</code> (or <code>-fail-on=error</code> / <code>-fail-on=warning</code>) to make CI gate on severity. Supports SARIF 2.1.0 export via <code>-sarif=PATH</code> for GitHub Code Scanning, GitLab Security, and Azure DevOps. See the README's "Commandlet — Headless CI/CD" section for the full flag list.</p>
+
+<h4>Q: Does BP Doctor modify my Blueprints permanently?</h4>
+<p>No. Fixes only modify in-memory state (marked as dirty). You must explicitly Save the Blueprint to persist changes. The Revert button restores from a backup taken before the fix. If you close the editor without saving, all fixes are discarded.</p>
+
+<h4>Q: Which UE5 versions are supported?</h4>
+<p>UE 5.3 through 5.7. The plugin uses <code>UE_VERSION_OLDER_THAN</code> guards for API drift between versions.</p>
+
+<footer>
+<p>BP Doctor &copy; 2025-2026. Blueprint Diagnostics &amp; Auto-Fix for Unreal Engine 5.</p>
+<p>To print this guide as PDF: Open in a browser &gt; Ctrl+P &gt; Save as PDF.</p>
+</footer>
+
+</body>
+</html>
