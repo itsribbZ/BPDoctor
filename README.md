@@ -66,7 +66,7 @@ python build.py
 
 ## Project Status
 
-Active development. Sprint 3 in progress (closing audit blockers from `research/godspeed_2026-04-23/`). Next milestone: Fab marketplace submission.
+Standalone UE5 editor plugin (39 checks, 7 auto-fixes). The check engine is also integrated into [Bionics](https://github.com/itsribbZ/Bionics), my primary project. Not published to a marketplace.
 
 ## Author
 
