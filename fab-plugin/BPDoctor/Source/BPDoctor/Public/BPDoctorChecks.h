@@ -11,7 +11,7 @@ class UAnimBlueprint;
 /**
  * BP Doctor Check Registry.
  * Contains all 39 diagnostic check definitions and their handler functions.
- * 20 AnimBP-specific + 14 General Blueprint checks.
+ * 25 AnimBP-specific + 14 General Blueprint checks.
  */
 class FBPDoctorChecks
 {

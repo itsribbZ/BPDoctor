@@ -64,9 +64,9 @@ each enabled check against them in-process. Results appear in a dockable Slate
 panel with severity icons, confidence badges, and a health grade per asset.
 
 When you click Fix or Fix All, BP Doctor first backs up the affected `.uasset`
-file to a sibling `.bpdoctor_backup` file, then applies the fix via the
-Blueprint editor APIs (same APIs the editor uses internally). Undo Fix restores
-the backup file and reloads the asset.
+file to `YourProject/Saved/BPDoctor/Backups/backup_<guid>.uasset`, then applies
+the fix via the Blueprint editor APIs (same APIs the editor uses internally).
+Undo Fix restores the backup file and reloads the asset.
 
 ---
 
@@ -132,8 +132,8 @@ because it survives editor restarts and covers package-level changes.
 
 - **Undo Fix** button — reverts the single most recent fix.
 - **Revert Selected** — reverts a specific selected issue's fix.
-- Backups are stored next to the original `.uasset` file with a `.bpdoctor_backup`
-  extension, timestamped.
+- Backups are stored in `YourProject/Saved/BPDoctor/Backups/` as
+  `backup_<guid>.uasset` files (8-character GUID suffix).
 
 ### 5. Navigate to Issue
 
