@@ -14,6 +14,7 @@ UE5 editor plugin (5.3 - 5.7) that scans every Blueprint and Animation Blueprint
 - **Custom rules engine** — banned_function / banned_node / required_node / node_limit, JSON or visual editor
 - **Three experience modes** — Beginner (plain English) / Intermediate (default) / Expert (full detection method)
 - **Dual build pipeline** — PyInstaller + Nuitka native binaries
+- **126/126 tests green** — scanner checks 48/48 (`dev/test_scanner_checks.py`) + engine harness 78/78 (`dev/test_v2.py`), measured 2026-07-02
 
 ## Repo Layout
 
