@@ -348,12 +348,12 @@ and FAQ / Troubleshooting.
 
 ## Support
 
-For issues, questions, or feedback, use the support channel listed on the Fab
-product listing. The bundled HTML user guide answers most common questions —
-check section 10 (FAQ & Troubleshooting) first.
+For issues, questions, or feedback, open an issue on GitHub:
+https://github.com/itsribbZ/BPDoctor/issues. The bundled HTML user guide
+answers most common questions — check section 10 (FAQ & Troubleshooting) first.
 
 ---
 
 **Version**: 2.7.4
 **Engine**: Unreal Engine 5.3 - 5.7
-**License**: See Fab EULA
+**License**: All rights reserved — published for portfolio review and evaluation only (see [LICENSE.txt](LICENSE.txt))

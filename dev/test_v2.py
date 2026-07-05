@@ -2,6 +2,7 @@
 """AnimBP Doctor v2.0 — Feature Verification Test Suite"""
 
 import importlib.util
+import importlib.machinery
 import sys
 import os
 import tempfile
@@ -9,8 +10,11 @@ import json
 import struct
 import shutil
 
-# Load the module without launching GUI
-spec = importlib.util.spec_from_file_location("abpd", "AnimBPDoctor.pyw")
+# Load the module without launching GUI.
+# Explicit SourceFileLoader: .pyw is only a registered source suffix on
+# Windows, so spec_from_file_location returns None for it on Linux/macOS.
+_loader = importlib.machinery.SourceFileLoader("abpd", "AnimBPDoctor.pyw")
+spec = importlib.util.spec_from_file_location("abpd", "AnimBPDoctor.pyw", loader=_loader)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 

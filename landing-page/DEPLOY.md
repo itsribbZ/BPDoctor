@@ -77,7 +77,7 @@ In `index.html`, find the `.demo-placeholder` div and replace it with:
 Replace placeholder URLs with your actual store pages:
 - Gumroad: `https://YOUR_ACCOUNT.gumroad.com/l/bpdoctor-standard`
 - Gumroad Pro: `https://YOUR_ACCOUNT.gumroad.com/l/bpdoctor-pro`
-- Fab.com: Your Fab listing URL once approved
+- Other storefronts: add listing URLs if and when the plugin is published there
 - Itch.io: Your itch.io page URL
 
 ### Testimonials

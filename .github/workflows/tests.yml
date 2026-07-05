@@ -1,0 +1,26 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  scanner-core:
+    name: Scanner-core Python harness (126 tests)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Scanner checks (48)
+        working-directory: dev
+        run: python test_scanner_checks.py
+
+      - name: Engine harness v2 (78)
+        working-directory: dev
+        run: python test_v2.py

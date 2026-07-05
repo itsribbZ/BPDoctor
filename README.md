@@ -1,5 +1,7 @@
 # BP Doctor
 
+[![Tests](https://github.com/itsribbZ/BPDoctor/actions/workflows/tests.yml/badge.svg)](https://github.com/itsribbZ/BPDoctor/actions/workflows/tests.yml)
+
 **Catches the silent animation bugs that make your character T-pose in shipped builds — the ones UE's compiler won't tell you about.**
 
 UE5 editor plugin (5.3 - 5.7) that scans every Blueprint and Animation Blueprint in your project for **39 silent-failure patterns**: missing MotionMatching databases, broken cached-pose links, disconnected slot sources, empty state machines, skeleton mismatches, root-motion mismatches, broken curve-driven blends, and similar time-bombs. Auto-fix handles 7 of them with one click. Every fix is reversible via file-level `.uasset` backup.
@@ -14,7 +16,7 @@ UE5 editor plugin (5.3 - 5.7) that scans every Blueprint and Animation Blueprint
 - **Custom rules engine** — banned_function / banned_node / required_node / node_limit, JSON or visual editor
 - **Three experience modes** — Beginner (plain English) / Intermediate (default) / Expert (full detection method)
 - **Dual build pipeline** — PyInstaller + Nuitka native binaries
-- **126/126 tests green** — scanner checks 48/48 (`dev/test_scanner_checks.py`) + engine harness 78/78 (`dev/test_v2.py`), measured 2026-07-02
+- **126/126 tests green (scanner-core Python harness)** — scanner checks 48/48 (`dev/test_scanner_checks.py`) + engine harness 78/78 (`dev/test_v2.py`), measured 2026-07-02
 
 ## Repo Layout
 
@@ -33,7 +35,7 @@ UE5 editor plugin (5.3 - 5.7) that scans every Blueprint and Animation Blueprint
 4. Click **Scan Project** — results group by asset with health grades
 5. Select an issue → see fix guide, or click **Fix All** for auto-fixable issues
 
-Full plugin documentation: [`fab-plugin/BPDoctor/README.md`](fab-plugin/BPDoctor/README.md) (360 lines, every check + every flag).
+Full plugin documentation: [`fab-plugin/BPDoctor/README.md`](fab-plugin/BPDoctor/README.md) (every check + every flag).
 
 ## CI/CD Integration
 
