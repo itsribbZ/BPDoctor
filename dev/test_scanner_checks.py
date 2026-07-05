@@ -9,6 +9,7 @@ Tests the FULL scan pipeline: file read -> parse -> check -> results.
 """
 
 import importlib.util
+import importlib.machinery
 import sys
 import os
 import struct
@@ -16,8 +17,11 @@ import tempfile
 import shutil
 import json
 
-# Load module without GUI
-spec = importlib.util.spec_from_file_location("bpd", "AnimBPDoctor.pyw")
+# Load module without GUI.
+# Explicit SourceFileLoader: .pyw is only a registered source suffix on
+# Windows, so spec_from_file_location returns None for it on Linux/macOS.
+_loader = importlib.machinery.SourceFileLoader("bpd", "AnimBPDoctor.pyw")
+spec = importlib.util.spec_from_file_location("bpd", "AnimBPDoctor.pyw", loader=_loader)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
