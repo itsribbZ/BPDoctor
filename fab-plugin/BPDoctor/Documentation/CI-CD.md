@@ -257,4 +257,4 @@ The current commandlet covers SARIF, JSON, and text output across GitHub / GitLa
 - Additional report formats (JUnit XML, CheckStyle XML, Markdown summary)
 - Bundled pre-commit helper script
 
-If any of these would unblock your team, send feedback through the Fab support channel — usage signal directly affects the roadmap.
+If any of these would unblock your team, open an issue on the GitHub repository (https://github.com/itsribbZ/BPDoctor/issues) — usage signal directly affects the roadmap.
