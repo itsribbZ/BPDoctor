@@ -6,25 +6,25 @@
 
     <!-- SEO: Primary Meta -->
     <title>BP Doctor - UE5 Blueprint Diagnostic Tool | Find & Fix Blueprint Bugs Instantly</title>
-    <meta name="description" content="BP Doctor scans your Unreal Engine 5 Blueprints in under 1 second. 26 checks, 8 auto-fixes, zero false positives. The only standalone Blueprint static analysis tool.">
+    <meta name="description" content="BP Doctor scans your Unreal Engine 5 Blueprints in under 1 second. 39 checks, 7 auto-fixes, SARIF output. Source-available on GitHub.">
     <meta name="keywords" content="UE5, Unreal Engine 5, Blueprint, debugging, static analysis, AnimBP, animation blueprint, diagnostic tool, auto-fix, Blueprint bugs">
     <meta name="author" content="BP Doctor">
-    <link rel="canonical" href="https://bpdoctor.dev/">
+    <link rel="canonical" href="https://github.com/itsribbZ/BPDoctor">
 
     <!-- SEO: Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://bpdoctor.dev/">
+    <meta property="og:url" content="https://github.com/itsribbZ/BPDoctor">
     <meta property="og:title" content="BP Doctor - Your Blueprints Have Bugs. Find Them in 0.3 Seconds.">
-    <meta property="og:description" content="26 checks. 8 auto-fixes. 100% accuracy on real projects. The only standalone UE5 Blueprint static analysis tool.">
-    <meta property="og:image" content="https://bpdoctor.dev/assets/og-card.png">
+    <meta property="og:description" content="39 checks. 7 auto-fixes. SARIF output. Source-available UE5 Blueprint static analysis.">
+    <meta property="og:image" content="assets/og-card.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
     <!-- SEO: Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="BP Doctor - UE5 Blueprint Diagnostic Tool">
-    <meta name="twitter:description" content="26 checks. 8 auto-fixes. 100% accuracy. Find Blueprint bugs in 0.3 seconds.">
-    <meta name="twitter:image" content="https://bpdoctor.dev/assets/og-card.png">
+    <meta name="twitter:description" content="39 checks. 7 auto-fixes. Find the Blueprint bugs the compiler won't flag.">
+    <meta name="twitter:image" content="assets/og-card.png">
 
     <!-- SEO: Schema.org Structured Data -->
     <script type="application/ld+json">
@@ -34,31 +34,9 @@
         "name": "BP Doctor",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Windows",
-        "description": "UE5 Blueprint diagnostic tool with 26 checks, 8 auto-fixes, SARIF output, and 100% accuracy on real projects.",
-        "url": "https://bpdoctor.dev",
-        "softwareVersion": "2.5.0",
-        "offers": [
-            {
-                "@type": "Offer",
-                "name": "Standard",
-                "price": "39.99",
-                "priceCurrency": "USD",
-                "description": "One-time purchase. 26 checks, 8 auto-fixes, CLI mode, HTML/JSON/SARIF reports."
-            },
-            {
-                "@type": "Offer",
-                "name": "Pro",
-                "price": "14.99",
-                "priceCurrency": "USD",
-                "description": "Monthly subscription. All Standard features plus 8 auto-fixes, watch mode, custom plugins, team config, diagnostic PDF."
-            }
-        ],
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "5",
-            "ratingCount": "1",
-            "bestRating": "5"
-        }
+        "description": "UE5 Blueprint diagnostic plugin with 39 checks, 7 auto-fixes, and SARIF output. Source-available; not yet for sale.",
+        "url": "https://github.com/itsribbZ/BPDoctor",
+        "softwareVersion": "2.5.0"
     }
     </script>
 
@@ -1081,9 +1059,9 @@
         <nav class="header-nav" id="headerNav">
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
-            <a href="#pricing">Pricing</a>
+            <a href="#availability">Availability</a>
             <a href="#faq">FAQ</a>
-            <a href="#pricing" class="btn btn-primary btn-sm">Get BP Doctor</a>
+            <a href="https://github.com/itsribbZ/BPDoctor" class="btn btn-primary btn-sm">View on GitHub</a>
         </nav>
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">&#9776;</button>
     </div>
@@ -1097,7 +1075,7 @@
         <div class="hero-text">
             <div class="hero-badge">
                 <span class="pulse"></span>
-                v2.5 &mdash; 126 tests passing, 100% accuracy
+                v2.5 &mdash; 126/126 scanner-core tests passing
             </div>
 
             <h1>Your Blueprints Have Bugs.<br><span class="highlight">Find Them in 0.3 Seconds.</span></h1>
@@ -1105,11 +1083,11 @@
             <p class="hero-sub">
                 BP Doctor scans your entire UE5 project and catches the Blueprint
                 errors that crash games, tank performance, and waste your debugging hours.
-                26 checks. 8 auto-fixes. Zero false positives.
+                39 checks. 7 auto-fixes. SARIF output for CI.
             </p>
 
             <div class="hero-cta-row">
-                <a href="#pricing" class="btn btn-primary btn-lg">Get BP Doctor &mdash; $24.99</a>
+                <a href="https://github.com/itsribbZ/BPDoctor" class="btn btn-primary btn-lg">View the source on GitHub</a>
                 <a href="#how-it-works" class="btn btn-secondary btn-lg">See How It Works</a>
             </div>
 
@@ -1160,11 +1138,11 @@
     <div class="container proof-bar-inner">
         <div class="proof-bar-item">
             <span class="icon">&#128269;</span>
-            <span><strong>26</strong> diagnostic checks</span>
+            <span><strong>39</strong> diagnostic checks</span>
         </div>
         <div class="proof-bar-item">
             <span class="icon">&#128295;</span>
-            <span><strong>8</strong> auto-fixes</span>
+            <span><strong>7</strong> auto-fixes</span>
         </div>
         <div class="proof-bar-item">
             <span class="icon">&#9889;</span>
@@ -1221,13 +1199,13 @@
 </section>
 
 <!-- ================================================================
-     FEATURES SECTION — 26 checks, 8 auto-fixes, moat features
+     FEATURES SECTION — 39 checks, 7 auto-fixes, moat features
      ================================================================ -->
 <section class="section" id="features" style="background: var(--bg-secondary);">
     <div class="container">
         <div class="section-header">
             <span class="section-label">Features</span>
-            <h2 class="section-title">26 Checks. 8 Auto-Fixes. One Scan.</h2>
+            <h2 class="section-title">39 Checks. 7 Auto-Fixes. One Scan.</h2>
             <p class="section-desc">
                 Every check is validated against real production projects with zero false positives.
                 11 high-confidence checks, 15 medium-confidence checks. No noise.
@@ -1237,7 +1215,7 @@
         <div class="features-grid">
             <div class="feature-card">
                 <div class="icon">&#128269;</div>
-                <h3>26 Diagnostic Checks</h3>
+                <h3>39 Diagnostic Checks</h3>
                 <p>From broken blend weights to circular dependencies, orphaned nodes, skeleton mismatches, deep nesting, and debug leftovers. Every common Blueprint failure mode covered.</p>
             </div>
             <div class="feature-card">
@@ -1270,7 +1248,7 @@
             <div class="feature-card">
                 <div class="icon">&#128268;</div>
                 <h3>Custom Check Plugins</h3>
-                <p>Define your own checks in JSON. BP Doctor loads them at startup and runs them alongside the built-in 26. No Python required.</p>
+                <p>Define your own checks in JSON. BP Doctor loads them at startup and runs them alongside the built-in 39. No Python required.</p>
                 <span class="tag tag-pro">Pro</span>
             </div>
             <div class="feature-card">
@@ -1351,93 +1329,19 @@
 </section>
 
 <!-- ================================================================
-     TESTIMONIALS — Placeholders for future reviews
+     AVAILABILITY
      ================================================================ -->
-<section class="section" id="testimonials">
+<section class="section" id="availability" style="background: var(--bg-secondary);">
     <div class="container">
         <div class="section-header">
-            <span class="section-label">From the Field</span>
-            <h2 class="section-title">Internal Testing Results</h2>
-        </div>
-
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <blockquote>"Ran it on our 300+ Blueprint project and it found 14 issues we had no idea existed. Two of them were causing our intermittent multiplayer desync."</blockquote>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">JB</div>
-                    <div class="testimonial-meta">
-                        <div class="name">Internal Testing</div>
-                        <div class="role">Sworder:721 &mdash; 4,642 assets, 81 Blueprints</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <blockquote>"The SARIF output plugs straight into our GitHub Actions workflow. Every PR now gets a Blueprint health check before merge. Game changer for our team."</blockquote>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">CI</div>
-                    <div class="testimonial-meta">
-                        <div class="name">CI/CD Integration</div>
-                        <div class="role">Pipeline validation use case</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <blockquote>"Beginner mode explained every single issue in plain English with fix steps. I learned more about Blueprint best practices in 10 minutes than in 6 months of forums."</blockquote>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">EM</div>
-                    <div class="testimonial-meta">
-                        <div class="name">Experience Mode</div>
-                        <div class="role">Beginner developer use case</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ================================================================
-     PRICING TABLE
-     ================================================================ -->
-<section class="section" id="pricing" style="background: var(--bg-secondary);">
-    <div class="container">
-        <div class="section-header">
-            <span class="section-label">Pricing</span>
-            <h2 class="section-title">One Tool. Zero Wasted Debugging Hours.</h2>
+            <span class="section-label">Availability</span>
+            <h2 class="section-title">Source-available on GitHub</h2>
             <p class="section-desc">
-                Every tier includes all 26 diagnostic checks. No feature gating on detection.
-                You always see every issue in your project.
+                BP Doctor is not for sale yet. The plugin source, the 39-check catalog, the 7 auto-fixes, and the test harness are public.
             </p>
         </div>
-
-        <div class="pricing-grid">
-            <!-- BP Doctor Pro — Single Product -->
-            <div class="price-card featured">
-                <div class="tier">BP Doctor Pro</div>
-                <div class="amount"><span class="currency">$</span>39<sup>.99</sup></div>
-                <div class="period">One-time purchase &mdash; lifetime updates</div>
-                <ul>
-                    <li>26 diagnostic checks</li>
-                    <li>8 one-click auto-fixes with backup</li>
-                    <li>GUI + full CLI mode (16 flags)</li>
-                    <li>HTML, JSON, Text, SARIF 2.1.0, PDF reports</li>
-                    <li>Watch mode (continuous monitoring)</li>
-                    <li>Custom check plugins (JSON)</li>
-                    <li>Team config sharing (export/import)</li>
-                    <li>Experience modes (beginner/intermediate/expert)</li>
-                    <li>BP FixGuide companion app (26 guides)</li>
-                </ul>
-                <a href="https://bpdoctor.gumroad.com/l/bp-doctor" class="btn btn-primary" data-store="gumroad" data-tier="pro">Buy Now &mdash; $39.99</a>
-            </div>
-        </div>
-
         <div class="store-links">
-            <span style="color: var(--text-muted); font-size: 0.85rem;">Also available on:</span>
-            <a href="https://github.com/itsribbZ/BPDoctor">GitHub</a>
-            <a href="https://itch.io/bpdoctor">Itch.io</a>
-            <a href="https://bpdoctor.gumroad.com">Gumroad</a>
+            <a href="https://github.com/itsribbZ/BPDoctor">View on GitHub</a>
         </div>
     </div>
 </section>
@@ -1508,7 +1412,7 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        Zero. BP Doctor was validated against a production project with 4,642 assets and 81 Blueprints. Every reported issue was a genuine problem. The 26 checks use confidence levels (11 HIGH, 15 MEDIUM) and you can suppress any check that does not apply to your project.
+                        Zero in internal testing on a 4,642-asset, 81-Blueprint project. The 39 checks carry confidence levels (High / Medium / Low), and you can suppress any check that does not apply to your project.
                     </div>
                 </div>
             </div>
@@ -1520,7 +1424,7 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        There is no free tier. Standard is a one-time $24.99 purchase that includes all 26 diagnostic checks, full CLI mode, and all export formats. That is less than one hour of debugging time. If BP Doctor saves you even one debugging session, it has paid for itself.
+                        BP Doctor is not for sale yet. The full source, including all 39 checks, the CLI mode, and every export format, is public on GitHub.
                     </div>
                 </div>
             </div>
@@ -1546,10 +1450,10 @@
 <section class="final-cta">
     <div class="container">
         <h2>Stop Debugging Blindly.<br><span style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Start Scanning.</span></h2>
-        <p>26 checks. 8 auto-fixes. 100% accuracy. Your Blueprints deserve better than Print String debugging.</p>
+        <p>39 checks. 7 auto-fixes. Your Blueprints deserve better than Print String debugging.</p>
         <div class="final-cta-buttons">
-            <a href="#pricing" class="btn btn-primary btn-lg">Get BP Doctor &mdash; $24.99</a>
-            <a href="mailto:contact@bpdoctor.dev" class="btn btn-secondary btn-lg">Talk to Us</a>
+            <a href="https://github.com/itsribbZ/BPDoctor" class="btn btn-primary btn-lg">View the source on GitHub</a>
+            <a href="https://github.com/itsribbZ/BPDoctor/issues" class="btn btn-secondary btn-lg">Open an issue</a>
         </div>
     </div>
 </section>
@@ -1563,10 +1467,9 @@
             &copy; 2026 BP Doctor. All rights reserved.
         </div>
         <div class="footer-links">
-            <a href="mailto:contact@bpdoctor.dev">Contact</a>
-            <a href="#pricing">Pricing</a>
+            <a href="https://github.com/itsribbZ/BPDoctor/issues">Issues</a>
+            <a href="#availability">Availability</a>
             <a href="#faq">FAQ</a>
-            <a href="https://twitter.com/bpdoctor">Twitter/X</a>
         </div>
     </div>
 </footer>

@@ -4,7 +4,7 @@
 
 **Catches the silent animation bugs that make your character T-pose in shipped builds — the ones UE's compiler won't tell you about.**
 
-UE5 editor plugin (5.3 - 5.7) that scans every Blueprint and Animation Blueprint in your project for **39 silent-failure patterns**: missing MotionMatching databases, broken cached-pose links, disconnected slot sources, empty state machines, skeleton mismatches, root-motion mismatches, broken curve-driven blends, and similar time-bombs. Auto-fix handles 7 of them with one click. Every fix is reversible via file-level `.uasset` backup.
+UE5 editor plugin (5.3 - 5.7) that scans every Blueprint and Animation Blueprint in your project with **39 checks (20 of them silent-failure patterns the compiler won't flag)**: missing MotionMatching databases, broken cached-pose links, disconnected slot sources, empty state machines, skeleton mismatches, root-motion mismatches, broken curve-driven blends, and similar time-bombs. Auto-fix handles 7 of them with one click. Every fix is reversible via file-level `.uasset` backup.
 
 ## Highlights
 
